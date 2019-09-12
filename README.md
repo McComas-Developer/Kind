@@ -12,7 +12,7 @@ Links: [Android Studio](https://developer.android.com/studio)
 
 Once you have Android Studio you can open your terminal in a directory of your choice and run:
 
-`git clone https://github.com/Elijah-Dangerfield/Santas-List.git`
+`git clone https://github.com/Elijah-Dangerfield/Kind.git`
 
 This should download all of the files needed to the current directory. Once done you can open Android Studio -> `Open an Existing...` and then choose the directory. 
 
