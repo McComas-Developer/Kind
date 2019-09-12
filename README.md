@@ -23,7 +23,7 @@ Once this is done make sure to run the project and confirm it worked :)
 
 ![Image](https://miro.medium.com/max/1200/1*Tt_OwtZJ993YzswuRyPQiA.png)
 
-#### For us each fragment will have a corresponding view model that holds the data needed for that view in the form of live data to observe and update views. 
+#### For us each fragment will have a corresponding view model that holds the data needed for that view in the form of live data to observe and update views. HOWEVER, we will not be using retrofit as this illustration shows. Our repository layer will only be in contact with firebase through the provided asynchonous methods. 
 
 
 ## Workflow
