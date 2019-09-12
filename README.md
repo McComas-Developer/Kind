@@ -19,7 +19,11 @@ This should download all of the files needed to the current directory. Once done
 Once this is done make sure to run the project and confirm it worked :)
 
 ## Architecture 
+#### Our app will follow MVVM architecture. We will have a repository layer that will gether data from out user either from Firebase (if it can) or from memory. Every View Model will get its data from the Repository to let its corresponding view observe the live data. This will let us write clean clone that can handle whatever our user can throw at it :)
+
 ![Image](https://miro.medium.com/max/1200/1*Tt_OwtZJ993YzswuRyPQiA.png)
+
+#### For us each fragment will have a corresponding view model that holds the data needed for that view in the form of live data to observe and update views. 
 
 
 ## Workflow
