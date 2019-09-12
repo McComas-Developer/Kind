@@ -46,7 +46,7 @@ After you have completed your feature you will need to submit a pull request. Yo
 ### !!!  BEFORE YOU SUBMIT PULL REQUEST  !!!
 make sure you run:
 
-`git merge master`  ### !!!!!while on your branch!!!! <br />
+ !!!!!while on your feature branch!!!!       `git merge master`       !!!!!while on your feature branch!!!! <br />
 
 This makes sure that your branch is up to date with master and can easily be merged in :)
 
