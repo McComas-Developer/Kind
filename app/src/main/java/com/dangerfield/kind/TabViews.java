@@ -104,6 +104,10 @@ public class TabViews extends FrameLayout implements ViewPager.OnPageChangeListe
                     pager.setCurrentItem(1);
                 }
                 Toast.makeText(getContext(),"Make this create a post",Toast.LENGTH_LONG).show();
+                /**
+                 * likely we will make some class that extends dialog and has its own layout. When the button is
+                 * clicked we will show the view and request focus on some plain text view
+                 */
             }
         });
     }
