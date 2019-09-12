@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "404777002263",
+    "firebase_url": "https://kind-af233.firebaseio.com",
+    "project_id": "kind-af233",
+    "storage_bucket": "kind-af233.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404777002263:android:c70f1cc32355c59cc38352",
+        "android_client_info": {
+          "package_name": "com.dangerfield.kind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404777002263-sfjukbh2vqid9caqe2d5p4v12s57gsbc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dangerfield.kind",
+            "certificate_hash": "c312f101f19db4f13d28ebbf6e8aae3e970b12a4"
+          }
+        },
+        {
+          "client_id": "404777002263-slrfanhqhmkd34br2itd9j0j8kr0rn8k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAogG3YY9lLhu2e2LBABu1EQMo7N45JxeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404777002263-slrfanhqhmkd34br2itd9j0j8kr0rn8k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
