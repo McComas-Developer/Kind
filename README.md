@@ -18,6 +18,9 @@ This should download all of the files needed to the current directory. Once done
 
 Once this is done make sure to run the project and confirm it worked :)
 
+## Architecture 
+![Image](https://miro.medium.com/max/1200/1*Tt_OwtZJ993YzswuRyPQiA.png)
+
 
 ## Workflow
 
