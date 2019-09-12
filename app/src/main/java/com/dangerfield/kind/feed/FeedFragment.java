@@ -2,23 +2,14 @@ package com.dangerfield.kind.feed;
 
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.dangerfield.kind.R;
 
 
 public class FeedFragment extends Fragment {
-
-
-    public FeedFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

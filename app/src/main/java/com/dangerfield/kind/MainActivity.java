@@ -12,18 +12,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setupViewPager();
+    }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+    private void setupViewPager() {
+        ViewPager viewPager =  findViewById(R.id.pager);
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
+
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1); //so it starts off at feed
+        viewPager.setOffscreenPageLimit(2); //lets fragments remain in memory
 
-        //this method should retain the instance of the other fragments so that they arent recreated every time
-        viewPager.setOffscreenPageLimit(2);
-
-        TabViews snapTabsView = (TabViews) findViewById(R.id.am_snap_tabs);
+        TabViews snapTabsView =  findViewById(R.id.am_snap_tabs);
         snapTabsView.initViewPager(viewPager);
-
     }
 }
 
