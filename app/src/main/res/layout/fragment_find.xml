@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@android:color/white"
     android:fitsSystemWindows="true">
-
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -15,9 +15,6 @@
         android:background="#00FFFFFF"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Light">
-
-
-
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -45,12 +42,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <!--    include scrollable conent here-->
-<!--    <include-->
-<!--        layout="@layout/view_feed"-->
-<!--        android:id="@+id/included_feed_view"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_width="match_parent">-->
-<!--    </include>-->
+    <include
+        layout="@layout/view_find"
+        android:id="@+id/included_find_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+    </include>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

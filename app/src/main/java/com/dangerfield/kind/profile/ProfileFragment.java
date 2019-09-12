@@ -1,4 +1,4 @@
-package com.dangerfield.kind;
+package com.dangerfield.kind.profile;
 
 
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dangerfield.kind.R;
 
 
 public class ProfileFragment extends Fragment {

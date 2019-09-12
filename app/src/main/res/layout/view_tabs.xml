@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/vst_parent"
     android:layout_width="match_parent"
-    android:layout_height="196dp"
-    tools:background="@color/light_purple"
+    android:layout_height="145dp"
+    android:background="@drawable/tabs_gradient"
     tools:layout_gravity="bottom">
 
     <ImageView
@@ -12,7 +12,7 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center|bottom"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="52dp"
         android:src="@drawable/ic_plus" />
 
     <ImageView
@@ -35,15 +35,9 @@
 
     <View
         android:id="@+id/vst_indicator"
-        android:background="@color/black"
         android:layout_width="30dp"
         android:layout_height="3dp"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="12dp" />
-
-    <TextView
-        android:id="@+id/tv_offset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.0" />
+        android:layout_marginBottom="12dp"
+        android:background="@android:color/black" />
 </FrameLayout>

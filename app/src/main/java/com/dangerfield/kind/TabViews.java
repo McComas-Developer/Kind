@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -41,7 +43,7 @@ public class TabViews extends FrameLayout implements ViewPager.OnPageChangeListe
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.view_tab_views,this,true);
+        LayoutInflater.from(getContext()).inflate(R.layout.view_tabs,this,true);
 
         mCenterImage = (ImageView) findViewById(R.id.vst_center_image);
         mEndImage = (ImageView) findViewById(R.id.vst_end_image);
@@ -91,6 +93,17 @@ public class TabViews extends FrameLayout implements ViewPager.OnPageChangeListe
                 if(pager.getCurrentItem() != 2){
                     pager.setCurrentItem(2);
                 }
+            }
+        });
+
+        mCenterImage.setOnClickListener( new OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if(pager.getCurrentItem() != 1){
+                    pager.setCurrentItem(1);
+                }
+                Toast.makeText(getContext(),"Make this create a post",Toast.LENGTH_LONG).show();
             }
         });
     }

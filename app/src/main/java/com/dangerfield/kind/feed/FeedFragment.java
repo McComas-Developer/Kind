@@ -1,4 +1,4 @@
-package com.dangerfield.kind;
+package com.dangerfield.kind.feed;
 
 
 import android.os.Bundle;
@@ -9,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dangerfield.kind.R;
 
-public class FindFragment extends Fragment {
+
+public class FeedFragment extends Fragment {
 
 
-    public FindFragment() {
+    public FeedFragment() {
         // Required empty public constructor
     }
 
@@ -22,7 +24,7 @@ public class FindFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_find, container, false);
+        return inflater.inflate(R.layout.fragment_feed, container, false);
     }
 
 }
