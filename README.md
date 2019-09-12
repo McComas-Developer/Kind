@@ -46,9 +46,9 @@ After you have completed your feature you will need to submit a pull request. Yo
 ### !!!  BEFORE YOU SUBMIT PULL REQUEST  !!!
 make sure you run:
 
-`git merge master` 
+`git merge master`  ### !!!!!while on your branch!!!! <br />
 
-while on your branch. This makes sure that your branch is up to date with master and can easily be merged in :)
+This makes sure that your branch is up to date with master and can easily be merged in :)
 
 The pull request will let the repo manager know that 
 your code is ready to be merged into the master branch. After code review is completed the card will be moved to done and the branch will be merged into master and another card may be checked out. 
