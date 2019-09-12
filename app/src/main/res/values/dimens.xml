@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="appbar_title_height">125dp</dimen>
+    <dimen name="appbar_header_height">200dp</dimen>
+</resources>

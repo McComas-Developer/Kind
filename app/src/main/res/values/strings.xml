@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Kind</string>
+    <string name="string_feed_title">Feed</string>
+    <string name="string_find_title">Find</string>
+    <string name="string_profile_title">Profile</string>
+</resources>
