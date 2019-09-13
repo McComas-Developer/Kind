@@ -19,22 +19,12 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView createPost;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         setupViewPager();
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Repository repo = new Repository(db);
-        ArrayList<String> tags = new ArrayList<>();
-        tags.add("dog");
-        createPost = findViewById(R.id.vst_center_image);
-        createPost.setOnClickListener((View v) -> {
-            repo.post(new Post());
-        });
     }
 
     private void setupViewPager() {
