@@ -8,7 +8,7 @@ interface RepositoryInterface {
 
     fun getPopularPosts()
 
-    fun getPostsWithTags(tags: List<String>)
+    fun getPostsWithTag(tag: String)
 
     fun searchPosts(term: String)
 
