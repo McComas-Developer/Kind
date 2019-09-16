@@ -2,18 +2,50 @@ package com.dangerfield.kind.api
 
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.model.User
+import com.google.firebase.firestore.FirebaseFirestore
 
-interface Repository {
+class Repository(private val db: FirebaseFirestore, user: User? = null) : KindRepository {
 
-    fun post(withPost: Post)
+    private val tagPosts = MutableLiveData<List<Post>>()
 
-    fun getPopularPosts()
+    override fun getPostsWithTag(tag: String): MutableLiveData<List<Post>> {
+        db.collection("Posts_test").whereArrayContains("tags",tag)
+                .get().addOnCompleteListener {
+                    tagPosts.postValue(it.result?.toObjects(Post::class.java))
+        }
+        return tagPosts
+    }
 
-    fun getPostsWithTag(tag: String) : MutableLiveData<List<Post>>
+    override fun post(withPost: Post) {
+        db.collection("Posts_test").document(withPost.UUID).set(withPost).addOnCompleteListener {
+            //TODO let user know its been posted
+        }
+    }
 
-    fun searchPosts(term: String)
+    override fun getPopularPosts() {
+        /**
+         * @We can either use serverless function to create popular collection every hour
+         * or get all of the posts and order them by hearts
+         */
+    }
 
-    fun createUser()
 
-    fun setProfilePicture(file: String)
+
+    override fun searchPosts(term: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //maybe combine tags results with text.contains result ? it would be cool to one day use machine learning
+        //to tag photos
+    }
+
+    override fun createUser() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //set up auth and create user. assign user variable to that. Ideally
+        //we can have some singlton to represent the user. THere should only ever be one user signed in at any give time
+    }
+
+    override fun setProfilePicture(file: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //get the users UUID, unser user_profiles_test/UUID/ replace the current image of them
+    }
 }
