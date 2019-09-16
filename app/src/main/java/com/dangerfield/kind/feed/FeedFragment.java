@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.dangerfield.kind.R;
 
-
 public class FeedFragment extends Fragment {
 
     @Override
@@ -17,5 +16,4 @@ public class FeedFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_feed, container, false);
     }
-
 }
