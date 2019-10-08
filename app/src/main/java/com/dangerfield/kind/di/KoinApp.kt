@@ -13,7 +13,7 @@ class KoinApp : Application(){
         startKoin{
             androidLogger()
             androidContext(this@KoinApp)
-            modules(viewModelModule)
+           // modules(viewModelModule)
         }
     }
 }

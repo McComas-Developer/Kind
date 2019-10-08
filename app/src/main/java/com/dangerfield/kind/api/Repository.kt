@@ -2,10 +2,9 @@ package com.dangerfield.kind.api
 
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.Post
-import com.dangerfield.kind.model.User
 import com.google.firebase.firestore.FirebaseFirestore
 
-class Repository(private val db: FirebaseFirestore, user: User? = null) : KindRepository {
+class Repository(private val db: FirebaseFirestore) : KindRepository {
 
     private val tagPosts = MutableLiveData<List<Post>>()
 
