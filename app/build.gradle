@@ -47,6 +47,10 @@ dependencies {
     //Live data and view model
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
+    //Glide for image loading
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+
 
 
 }

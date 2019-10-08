@@ -1,6 +1,7 @@
 package com.dangerfield.kind.api
 
 import androidx.lifecycle.MutableLiveData
+import com.dangerfield.kind.model.ExpandedState
 import com.dangerfield.kind.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -10,8 +11,10 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
 
     override fun getPostsWithTag(tag: String): MutableLiveData<List<Post>> {
         db.collection("Posts_test").whereArrayContains("tags",tag)
-                .get().addOnCompleteListener {
-                    tagPosts.postValue(it.result?.toObjects(Post::class.java))
+                .get().addOnCompleteListener {data ->
+                    val list = data.result?.toObjects(Post::class.java)
+                    list?.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
+                    tagPosts.postValue(list)
         }
         return tagPosts
     }
