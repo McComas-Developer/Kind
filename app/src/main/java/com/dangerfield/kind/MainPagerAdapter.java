@@ -4,9 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import com.dangerfield.kind.feed.FeedFragment;
-import com.dangerfield.kind.find.FindFragment;
-import com.dangerfield.kind.profile.ProfileFragment;
+import com.dangerfield.kind.ui.feed.FeedFragment;
+import com.dangerfield.kind.ui.find.FindFragment;
+import com.dangerfield.kind.ui.profile.ProfileFragment;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 

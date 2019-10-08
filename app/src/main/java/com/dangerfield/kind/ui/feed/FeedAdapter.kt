@@ -1,20 +1,20 @@
-package com.dangerfield.kind.feed
+package com.dangerfield.kind.ui.feed
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dangerfield.kind.R
 import com.dangerfield.kind.model.ExpandedState
+import com.dangerfield.kind.model.LikedState
 import com.dangerfield.kind.model.Post
 import kotlinx.android.synthetic.main.item_feed_post.view.*
-
 
 class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
 
@@ -36,6 +36,22 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
         val image: ImageView = view.iv_post
         val posterImage: ImageView = view.iv_post_profile_pic
         val moreButton: TextView = view.tv_more
+        val heartButton: ImageButton = view.btn_heart
+
+        init {
+            heartButton.setOnClickListener {
+                toggleHeart( adapterPosition)
+            }
+        }
+    }
+
+    private fun toggleHeart(position: Int) {
+        posts[position].likedState = when(posts[position].likedState) {
+                LikedState.LIKED -> LikedState.UNLIKED
+                LikedState.UNLIKED -> LikedState.LIKED
+            }
+
+        notifyDataSetChanged()
     }
 
     private fun toggleText(it: Post) {
@@ -57,10 +73,19 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
         setPostText(post, holder)
         setPostProfilePic(post, holder)
         setPostImage(post, holder)
+        setPostLiked(post, holder)
 
         holder.moreButton.setOnClickListener {
             toggleText(post)
         }
+    }
+
+    private fun setPostLiked(post: Post, holder: ViewHolder) {
+        holder.heartButton.background =
+                if(post.likedState == LikedState.LIKED)
+                    context.resources.getDrawable(R.drawable.ic_heart_filled,null)
+                else
+                    context.resources.getDrawable(R.drawable.ic_heart,null)
     }
 
     private fun setPostProfilePic(post: Post, holder: ViewHolder) {

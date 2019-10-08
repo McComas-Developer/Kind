@@ -1,4 +1,4 @@
-package com.dangerfield.kind.find;
+package com.dangerfield.kind.ui.find;
 
 
 import android.os.Bundle;

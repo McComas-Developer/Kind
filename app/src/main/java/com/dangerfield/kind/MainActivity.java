@@ -1,6 +1,7 @@
 package com.dangerfield.kind;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -26,5 +27,6 @@ public class MainActivity extends AppCompatActivity {
         TabViews snapTabsView =  findViewById(R.id.am_snap_tabs);
         snapTabsView.initViewPager(viewPager);
     }
+
 }
 

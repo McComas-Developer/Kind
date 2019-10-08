@@ -1,4 +1,4 @@
-package com.dangerfield.kind.feed;
+package com.dangerfield.kind.ui.feed;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.dangerfield.kind.R;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class FeedFragment extends Fragment {
 

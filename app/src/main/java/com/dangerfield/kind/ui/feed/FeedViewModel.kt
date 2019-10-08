@@ -1,4 +1,4 @@
-package com.dangerfield.kind.feed
+package com.dangerfield.kind.ui.feed
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

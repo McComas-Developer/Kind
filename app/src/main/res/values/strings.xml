@@ -3,4 +3,7 @@
     <string name="string_feed_title">Feed</string>
     <string name="string_find_title">Find</string>
     <string name="string_profile_title">Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

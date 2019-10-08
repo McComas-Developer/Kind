@@ -1,4 +1,4 @@
-package com.dangerfield.kind.profile;
+package com.dangerfield.kind.ui.profile;
 
 
 import android.os.Bundle;
