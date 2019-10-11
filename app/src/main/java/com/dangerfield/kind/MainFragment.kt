@@ -14,7 +14,6 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
@@ -22,8 +21,6 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         setupViewPager()
-        Log.d("Navigation","SHOWING MAIN FRAGMENT WITH VIEW PAGER")
-
     }
 
     private fun setupViewPager() {
