@@ -27,11 +27,9 @@ class MainFragment : Fragment() {
     }
 
     private fun setupViewPager() {
-        pager.adapter = MainPagerAdapter(fragmentManager)
+        pager.adapter = MainPagerAdapter(childFragmentManager)
         pager.currentItem = 1 //so it starts off at feed
         pager.offscreenPageLimit = 2 //lets fragments remain in memory
         am_snap_tabs.initViewPager(pager)
     }
-
-
 }
