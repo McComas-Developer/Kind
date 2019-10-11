@@ -10,7 +10,7 @@ import com.dangerfield.kind.ui.profile.ProfileFragment;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
-    MainPagerAdapter(FragmentManager fm) {
+    public MainPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
