@@ -12,11 +12,17 @@ data class Post(
         var images: List<String> = listOf(),
         var text: String = "",
         var posterUUID: String = "",
-        var expandedState: ExpandedState = ExpandedState.NONE
+        var expandedState: ExpandedState = ExpandedState.NONE,
+        var likedState: LikedState = LikedState.UNLIKED
 )
 
 enum class ExpandedState {
     EXPANDED,
     COLLAPSED,
     NONE
+}
+
+enum class LikedState {
+    LIKED,
+    UNLIKED
 }

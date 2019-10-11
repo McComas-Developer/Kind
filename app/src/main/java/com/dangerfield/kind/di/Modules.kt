@@ -4,6 +4,7 @@ import com.dangerfield.kind.api.Repository
 import com.dangerfield.kind.feed.FeedViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.android.viewmodel.dsl.viewModel
+
 import org.koin.dsl.module
 
 val viewModelModule = module {

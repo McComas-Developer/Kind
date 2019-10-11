@@ -78,31 +78,22 @@ public class TabViews extends FrameLayout implements ViewPager.OnPageChangeListe
     public void initViewPager(final ViewPager pager){
         pager.addOnPageChangeListener(this);
 
-        mStartImage.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(pager.getCurrentItem() != 0){
-                    pager.setCurrentItem(0);
-                }
+        mStartImage.setOnClickListener(view -> {
+            if(pager.getCurrentItem() != 0){
+                pager.setCurrentItem(0);
             }
         });
 
-        mEndImage.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(pager.getCurrentItem() != 2){
-                    pager.setCurrentItem(2);
-                }
+        mEndImage.setOnClickListener(view -> {
+            if(pager.getCurrentItem() != 2){
+                pager.setCurrentItem(2);
             }
         });
 
-        mCenterImage.setOnClickListener( new OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if(pager.getCurrentItem() != 1){
-                    pager.setCurrentItem(1);
-                }
+        mCenterImage.setOnClickListener(view -> {
+            if(pager.getCurrentItem() != 1){
+                pager.setCurrentItem(1);
+            }else{
                 Toast.makeText(getContext(),"Make this create a post",Toast.LENGTH_LONG).show();
                 /**
                  * likely we will make some class that extends dialog and has its own layout. When the button is
