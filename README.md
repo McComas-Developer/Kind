@@ -4,7 +4,7 @@
 
 ### This will be our repository for CSCI 3033. The goal here is to build an Android app that lets people post positive things they had done or seen and see what others have done or seen. The goal is to spread the kindness :)
 
-![](https://firebasestorage.googleapis.com/v0/b/kind-af233.appspot.com/o/Screen%20Shot%202019-10-12%20at%202.30.39%20PM.png?alt=media&token=5a45c3e1-5435-4491-9942-0dc1b701a3f8)
+![](https://firebasestorage.googleapis.com/v0/b/kind-af233.appspot.com/o/Screen%20Shot%202019-10-12%20at%202.41.13%20PM.png?alt=media&token=bb2ad127-c6c4-4b84-97e5-d12a7672b3c3)
 
 
 ## Getting Started
