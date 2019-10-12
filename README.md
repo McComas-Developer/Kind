@@ -4,6 +4,10 @@
 
 ### This will be our repository for CSCI 3033. The goal here is to build an Android app that lets people post positive things they had done or seen and see what others have done or seen. The goal is to spread the kindness :)
 
+[](https://firebasestorage.googleapis.com/v0/b/kind-af233.appspot.com/o/Screen%20Shot%202019-10-12%20at%202.30.39%20PM.png?alt=media&token=5a45c3e1-5435-4491-9942-0dc1b701a3f8)
+[](https://firebasestorage.googleapis.com/v0/b/kind-af233.appspot.com/o/Screen%20Shot%202019-10-12%20at%202.35.40%20PM.png?alt=media&token=448c7205-b829-4f73-bc99-fb907b888d9d)
+[](https://firebasestorage.googleapis.com/v0/b/kind-af233.appspot.com/o/Screen%20Shot%202019-10-12%20at%202.35.49%20PM.png?alt=media&token=40ac080c-7b82-4444-90a1-5769f32a6c79)
+
 
 ## Getting Started
 In order to get started working on this project you will need Java and the JDK (obviously) as well as Android Studio (which I think might also give you the JDK)
