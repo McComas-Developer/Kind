@@ -22,8 +22,8 @@ import com.dangerfield.kind.api.Success
 import com.dangerfield.kind.util.hideKeyBoardOnPressAway
 import com.dangerfield.kind.util.showIFF
 import com.dangerfield.kind.util.visibleContingency
-import kotlinx.android.synthetic.main.fragment_sign_up.*
-import kotlinx.android.synthetic.main.fragment_sign_up.btn_sign_up
+import kotlinx.android.synthetic.main.view_sign_up.*
+
 
 class SignUpFragment : Fragment() {
 
