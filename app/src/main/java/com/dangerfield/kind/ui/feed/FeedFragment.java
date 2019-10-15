@@ -1,5 +1,6 @@
 package com.dangerfield.kind.ui.feed;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.dangerfield.kind.R;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
 import java.util.ArrayList;
 
 public class FeedFragment extends Fragment {
@@ -22,6 +25,7 @@ public class FeedFragment extends Fragment {
     private RecyclerView feedRecyclerView;
     private FeedAdapter feedAdapter;
     private ImageView createPostButton;
+    private CollapsingToolbarLayout collapsing_toolbar;
 
 
     @Override
@@ -29,6 +33,7 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_feed, container, false);
+        collapsing_toolbar = v.findViewById(R.id.collapsing_toolbar);
         feedRecyclerView = v.findViewById(R.id.rv_feed);
         return v;
     }
@@ -38,6 +43,10 @@ public class FeedFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         setUpRecyclerView();
+
+        collapsing_toolbar.setExpandedTitleTypeface(
+                Typeface.create(collapsing_toolbar.getExpandedTitleTypeface(), Typeface.BOLD)
+        );
 
         createPostButton = getActivity().findViewById(R.id.vst_center_image);
         ViewPager pager =  getActivity().findViewById(R.id.pager);

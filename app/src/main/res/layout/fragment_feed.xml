@@ -26,6 +26,7 @@
             app:collapsedTitleGravity="center_vertical"
             app:expandedTitleMargin="32dp"
             app:expandedTitleMarginStart="16dp"
+            app:expandedTitleTextAppearance="@style/AppTheme.BigTitle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:title="@string/string_feed_title">
 

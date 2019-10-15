@@ -24,6 +24,7 @@
             android:background="@android:color/white"
             app:expandedTitleMargin="32dp"
             app:expandedTitleMarginStart="16dp"
+            app:expandedTitleTextAppearance="@style/AppTheme.BigTitle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             >
 

@@ -26,6 +26,7 @@
             app:expandedTitleMargin="32dp"
             app:expandedTitleMarginStart="16dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:expandedTitleTextAppearance="@style/AppTheme.BigTitle"
             app:title="@string/sign_up">
 
             <androidx.appcompat.widget.Toolbar

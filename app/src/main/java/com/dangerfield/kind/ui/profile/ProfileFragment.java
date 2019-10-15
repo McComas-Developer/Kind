@@ -1,6 +1,7 @@
 package com.dangerfield.kind.ui.profile;
 
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -15,12 +16,14 @@ import android.widget.Button;
 
 import com.dangerfield.kind.R;
 import com.dangerfield.kind.api.CurrentUser;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 
 public class ProfileFragment extends Fragment {
 
     private CurrentUser currentUser;
     private Button signOutButton;
+    private CollapsingToolbarLayout collapsing_toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,7 +34,7 @@ public class ProfileFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(view.findViewById(R.id.profile_toolbar));
         if(currentUser.isAuthenticated()){ showProfile(view); }
         else{ showOnBoarding(view); }
-
+        collapsing_toolbar = view.findViewById(R.id.profile_collapsing_toolbar);
         return view;
     }
 
@@ -39,6 +42,9 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        collapsing_toolbar.setExpandedTitleTypeface(
+                Typeface.create(collapsing_toolbar.getExpandedTitleTypeface(), Typeface.BOLD)
+        );
 
     }
 
