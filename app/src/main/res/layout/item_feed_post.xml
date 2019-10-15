@@ -32,7 +32,7 @@
             android:background="@null"
             android:foregroundGravity="center"
             android:gravity="center"
-            android:text="more"
+            android:text="@string/more"
             android:textAllCaps="false"
             android:textColor="#536DFE"
             android:visibility="invisible"
@@ -92,7 +92,6 @@
             android:ellipsize="none"
             android:foregroundGravity="left"
             android:gravity="left"
-            android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_today_i" />

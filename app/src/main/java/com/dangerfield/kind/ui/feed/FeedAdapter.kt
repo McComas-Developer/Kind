@@ -39,24 +39,25 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
         val heartButton: ImageButton = view.btn_heart
 
         init {
-            heartButton.setOnClickListener {
-                toggleHeart( adapterPosition)
+            heartButton.setOnClickListener { toggleHeart(adapterPosition) }
+            moreButton.setOnClickListener {
+                toggleText(adapterPosition)
             }
         }
     }
 
     private fun toggleHeart(position: Int) {
         posts[position].likedState = when(posts[position].likedState) {
-                LikedState.LIKED -> LikedState.UNLIKED
+                LikedState.LIKED -> {LikedState.UNLIKED}
                 LikedState.UNLIKED -> LikedState.LIKED
             }
 
         notifyDataSetChanged()
     }
 
-    private fun toggleText(it: Post) {
-        it.expandedState =
-                if(it.expandedState == ExpandedState.EXPANDED) ExpandedState.COLLAPSED
+    private fun toggleText(position: Int) {
+        posts[position].expandedState =
+                if(posts[position].expandedState == ExpandedState.EXPANDED) ExpandedState.COLLAPSED
                 else ExpandedState.EXPANDED
 
         notifyDataSetChanged()
@@ -74,10 +75,6 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
         setPostProfilePic(post, holder)
         setPostImage(post, holder)
         setPostLiked(post, holder)
-
-        holder.moreButton.setOnClickListener {
-            toggleText(post)
-        }
     }
 
     private fun setPostLiked(post: Post, holder: ViewHolder) {
@@ -130,5 +127,4 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
     }
 
     override fun getItemCount() = this.posts.size
-
 }

@@ -32,8 +32,6 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
          */
     }
 
-
-
     override fun searchPosts(term: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         //maybe combine tags results with text.contains result ? it would be cool to one day use machine learning

@@ -4,6 +4,19 @@
     <string name="string_find_title">Find</string>
     <string name="string_profile_title">Profile</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="looks_like_you_re_not_logged_in">Looks like you\'re not logged in</string>
+    <string name="or">or</string>
+    <string name="sign_out">Sign out</string>
+    <string name="more">more</string>
+    <string name="sign_up">Sign up</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="string_private">Private</string>
+    <string name="select_a_photo">Select a photo</string>
+    <string name="edit_photo">Edit Photo</string>
+    <string name="log_in">Log in</string>
+    <string name="email">Email</string>
+    <string name="sign_in">Sign in</string>
+    <string name="missing_field">Please fill out all fields</string>
 </resources>
