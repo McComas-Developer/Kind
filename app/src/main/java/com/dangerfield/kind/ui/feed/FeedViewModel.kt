@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class FeedViewModel : ViewModel() {
     //TODO: for now we will justmake it but we need to find a way to inject this
+    // @inject val repository KindRepository
     private var repository: KindRepository = Repository(FirebaseFirestore.getInstance())
     private var tagPosts = MutableLiveData<List<Post>>()
 
