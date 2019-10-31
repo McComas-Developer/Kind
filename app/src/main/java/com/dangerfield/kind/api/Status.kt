@@ -1,7 +1,7 @@
 package com.dangerfield.kind.api
 
 sealed class Status {
-    class LOADING : Status()
-    class SUCCESS : Status()
+    object LOADING : Status()
+    object SUCCESS : Status()
     class FAILURE(val message: String) : Status()
 }

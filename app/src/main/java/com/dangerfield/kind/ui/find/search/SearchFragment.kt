@@ -1,6 +1,7 @@
 package com.dangerfield.kind.ui.find.search
 
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,12 +9,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dangerfield.kind.R
 import com.dangerfield.kind.ui.feed.PostAdapter
+import com.dangerfield.kind.util.hideKeyBoardOnPressAway
 import com.dangerfield.kind.util.showIFF
 import kotlinx.android.synthetic.main.fragment_search.*
 import java.util.ArrayList
@@ -47,6 +51,8 @@ class SearchFragment : Fragment() {
 
         ib_clear.setOnClickListener { tv_search.text.clear() }
 
+        tv_search.hideKeyBoardOnPressAway()
+
         tv_search.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
 
@@ -56,15 +62,26 @@ class SearchFragment : Fragment() {
                 ib_clear.showIFF((p0?.length ?: 0) > 0)
             }
         })
+
+        tv_search.setOnEditorActionListener { textView, i, keyEvent ->
+            if(i == EditorInfo.IME_ACTION_SEARCH){
+                viewModel.currentSearchTerm.value = tv_search.text.toString().trim()
+                tv_search.clearFocus()
+                true
+            }else{false}
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getPostWithTag("dogs").observe(viewLifecycleOwner, Observer {
+        viewModel.searchResult.observe(viewLifecycleOwner, Observer {
             postAdapter.posts = it
+            tv_empty.showIFF(it.isEmpty())
         })
     }
+
+
 
     private fun setUpRecyclerView() {
         rv_search_post.layoutManager = LinearLayoutManager(activity)

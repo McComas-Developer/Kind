@@ -52,7 +52,7 @@ object CurrentUser : UserRepository {
         if(profilePicture == null)
             return Error(ErrorMessage("Please Select Profile Picture"))
 
-        authStatus.value = Status.LOADING()
+        authStatus.value = Status.LOADING
 
         checkUserNameTaken(db, username).addOnSuccessListener {
             if(it.documents.isNullOrEmpty()) createFirebaseAccount(store, profilePicture, db, username, email, pass)
@@ -73,7 +73,7 @@ object CurrentUser : UserRepository {
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if(it.isSuccessful){
-                authStatus.value = Status.SUCCESS()
+                authStatus.value = Status.SUCCESS
                 store.getReference("/user_profile_test/${uid!!}").putFile(profilePicture)
                 db.collection("Users_test").add(User(username, listOf()))
             }else{
@@ -87,10 +87,10 @@ object CurrentUser : UserRepository {
 
         if(email.isEmpty() || pass.isEmpty()) return Error(ErrorMessage("Please fill out all fields"))
 
-        authStatus.value = Status.LOADING()
+        authStatus.value = Status.LOADING
 
         auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
-            if(it.isSuccessful) authStatus.value = Status.SUCCESS()
+            if(it.isSuccessful) authStatus.value = Status.SUCCESS
             else authStatus.value = Status.FAILURE(it.exception?.localizedMessage ?: "Unknown Error")
         }
         return Success(authStatus)
