@@ -4,6 +4,8 @@
 
 ### This will be our repository for CSCI 3033. The goal here is to build an Android app that lets people post positive things they had done or seen and see what others have done or seen. The goal is to spread the kindness :)
 
+![](https://firebasestorage.googleapis.com/v0/b/kind-af233.appspot.com/o/Screen%20Shot%202019-10-12%20at%202.41.13%20PM.png?alt=media&token=bb2ad127-c6c4-4b84-97e5-d12a7672b3c3)
+
 
 ## Getting Started
 In order to get started working on this project you will need Java and the JDK (obviously) as well as Android Studio (which I think might also give you the JDK)
@@ -19,7 +21,7 @@ This should download all of the files needed to the current directory. Once done
 Once this is done make sure to run the project and confirm it worked :)
 
 ## Architecture 
-#### Our app will follow MVVM architecture. We will have a repository layer that will gather data for our user either from Firebase (if it can) or from memory. Every View Model will get its data from the Repository to let its corresponding view observe the live data. This will let us write clean clone that can handle whatever our user can throw at it :)
+#### Our app will follow MVVM architecture. We will have a repository layer that will gather data for our user either from Firebase (if it can) or from memory. Every View Model will get its data from the Repository to let its corresponding view observe the live data. This will let us write clean code that can handle whatever our user can throw at it :)
 
 ![Image](https://miro.medium.com/max/1200/1*Tt_OwtZJ993YzswuRyPQiA.png)
 
