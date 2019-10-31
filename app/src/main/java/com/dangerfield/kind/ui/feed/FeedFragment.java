@@ -23,7 +23,7 @@ public class FeedFragment extends Fragment {
 
     private FeedViewModel viewModel;
     private RecyclerView feedRecyclerView;
-    private FeedAdapter feedAdapter;
+    private PostAdapter feedAdapter;
     private ImageView createPostButton;
     private CollapsingToolbarLayout collapsing_toolbar;
 
@@ -71,7 +71,7 @@ public class FeedFragment extends Fragment {
     private void setUpRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         feedRecyclerView.setLayoutManager(layoutManager);
-        feedAdapter = new FeedAdapter(getActivity(), new ArrayList<>());
+        feedAdapter = new PostAdapter(getActivity());
         feedRecyclerView.setAdapter(feedAdapter);
     }
 }
