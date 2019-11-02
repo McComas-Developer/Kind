@@ -32,8 +32,8 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         currentUser = CurrentUser.INSTANCE;
         ((AppCompatActivity) getActivity()).setSupportActionBar(view.findViewById(R.id.profile_toolbar));
-        if(currentUser.isAuthenticated()){ showProfile(view); }
-        else{ showOnBoarding(view); }
+        //if(currentUser.isAuthenticated()){ showProfile(view); }
+       // else{ showOnBoarding(view); }
         collapsing_toolbar = view.findViewById(R.id.profile_collapsing_toolbar);
         return view;
     }
@@ -75,7 +75,7 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.included_authentication_view).setVisibility(View.GONE);
 
         signOutButton.setOnClickListener(it -> {
-            CurrentUser.INSTANCE.signOut(getContext());
+          //  CurrentUser.INSTANCE.signOut(getContext());
             reloadFragment();
         });
     }

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.dangerfield.kind.R;
+import com.dangerfield.kind.api.Resource;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
@@ -61,9 +62,15 @@ public class FeedFragment extends Fragment {
 
         viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
-        viewModel.getPostWithTag("dogs").observe(this, updates -> {
-            Log.d("posts","received " + updates.size() + " posts from firebase");
-            feedAdapter.setPosts(updates);
+        viewModel.getPostWithTag("dogs").observe(this, result -> {
+            if(result instanceof Resource.Error){
+                //show error
+            }else if(result instanceof  Resource.Loading){
+                //show loading
+
+            }else if(result instanceof Resource.Success && result.getData() != null){
+                feedAdapter.setPosts(result.getData());
+            }
         });
 
     }

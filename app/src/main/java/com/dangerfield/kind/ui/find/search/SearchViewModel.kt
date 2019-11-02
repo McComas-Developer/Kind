@@ -9,7 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class SearchViewModel : ViewModel() {
 
-    private var repository: KindRepository = Repository(FirebaseFirestore.getInstance())
+    private var repository: Repository = Repository(FirebaseFirestore.getInstance())
 
     var currentSearchTerm = MutableLiveData<String>()
 
