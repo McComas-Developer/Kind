@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import com.dangerfield.kind.R
+import com.dangerfield.kind.api.Resource
 
 import com.dangerfield.kind.util.hideKeyBoardOnPressAway
 import com.dangerfield.kind.util.showIFF
@@ -19,9 +20,6 @@ import kotlinx.android.synthetic.main.fragment_login.tv_email
 import kotlinx.android.synthetic.main.fragment_login.tv_password
 
 class LoginFragment : Fragment() {
-    private val statusObserver: Observer<Int> by lazy {
-        setStatusObserver()
-    }
     private val viewModel: LoginViewModel by lazy {
         ViewModelProviders.of(this).get(LoginViewModel::class.java)
     }
@@ -43,33 +41,24 @@ class LoginFragment : Fragment() {
         }
 
         listOf<View>(tv_email,tv_password).forEach{it.hideKeyBoardOnPressAway()}
+
+        viewModel.loginStatus.observe(viewLifecycleOwner, Observer {
+            pb_auth_login.showIFF(it is Resource.Loading)
+            pb_auth_login.visibleContingency(
+                    {btn_submit_log_in.text = ""} ,
+                    {btn_submit_log_in.text = getString(R.string.sign_in)})
+
+            when(it){
+                is Resource.Success ->
+                    NavHostFragment.findNavController(this).popBackStack()
+                is Resource.Error ->{
+                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                    btn_submit_log_in.isClickable = true
+                }
+            }
+        })
     }
 
-    private fun setStatusObserver(): Observer<Int> {
-        return Observer {
-           // pb_auth_login.showIFF(it is LOADING)
-            pb_auth_login.visibleContingency({btn_submit_log_in.text = ""} , {btn_submit_log_in.text = getString(R.string.sign_in)})
-//
-//            when(it){
-//                is LOADING -> {}//no op
-//                is SUCCESS ->
-//                    NavHostFragment.findNavController(this).popBackStack()
-//                is FAILURE ->{
-//                    btn_submit_log_in.isClickable = true
-//                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-//                }
-//            }
-        }
-    }
 
-    private fun signIn(email: String, password: String) {
-//        val result = viewModel.login(email, password)
-//        when(result){
-//            is Success -> result.value.observe(viewLifecycleOwner, statusObserver)
-//            is Error -> {
-//                Toast.makeText(context, result.value.message, Toast.LENGTH_LONG).show()
-//                btn_submit_log_in.isClickable = true
-//            }
-//        }
-    }
+    private fun signIn(email: String, password: String) { viewModel.login(email,password) }
 }

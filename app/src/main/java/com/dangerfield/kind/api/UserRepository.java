@@ -12,13 +12,15 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import javax.annotation.Nullable;
 
+import kotlin.Unit;
+
 public interface UserRepository {
 
     void getLikedPosts();
 
     void getRecentSearches();
 
-//    Result<LiveData<Status>, ErrorMessage> signUp(
+//    LiveData<Resource<Unit>> signUp(
 //                            FirebaseFirestore db,
 //                            FirebaseStorage store,
 //                            @Nullable Uri profilePicture,
@@ -26,8 +28,8 @@ public interface UserRepository {
 //                            String email,
 //                            String pass,
 //                            String confirmPass);
-//
-//    Result<LiveData<Status>, ErrorMessage > signIn(String email, String pass);
+
+    LiveData<Resource<Unit>>signIn(String email, String pass);
 
     void signOut(Context context);
 

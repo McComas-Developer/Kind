@@ -12,19 +12,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 
-object CurrentUser  {
+object CurrentUser : UserRepository {
 
-//    private var auth = FirebaseAuth.getInstance()
-//    //private var authStatus = MutableLiveData<Status>()
-//    val uid: String? get() {return auth.currentUser?.uid}
-//    val isAuthenticated: Boolean get() { return auth.currentUser != null }
-//
-//
-//    override fun getLikedPosts() {
-//    }
-//
-//    override fun getRecentSearches() {
-//    }
+    private var auth = FirebaseAuth.getInstance()
+    private var authStatus = MutableLiveData<Resource<Unit>>()
+    val uid: String? get() {return auth.currentUser?.uid}
+    val isAuthenticated: Boolean get() { return auth.currentUser != null }
+
+    override fun getLikedPosts() {
+    }
+
+    override fun getRecentSearches() {
+    }
 //
 //    override fun signUp(db: FirebaseFirestore,
 //                        store: FirebaseStorage,
@@ -75,34 +74,32 @@ object CurrentUser  {
 //    }
 //
 //
-//    override fun signIn(email: String, pass: String): Result<LiveData<Status>, ErrorMessage> {
-//
-//        if(email.isEmpty() || pass.isEmpty()) return Error(ErrorMessage("Please fill out all fields"))
-//
-//        authStatus.value = Status.LOADING
-//
-//        auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
-//            if(it.isSuccessful) authStatus.value = Status.SUCCESS
-//            else authStatus.value = Status.FAILURE(it.exception?.localizedMessage ?: "Unknown Error")
-//        }
-//        return Success(authStatus)
-//    }
-//
-//
-//    override fun updateUserName(newName: String) {
-//
-//    }
-//
-//
-//    override fun signOut(context: Context?){
-//        auth.signOut()
-//    }
-//
-//    override fun setProfilePicture() {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//    }
-//
-//    override fun createPost(post: Post?) {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//    }
+    override fun signIn(email: String, pass: String): MutableLiveData<Resource<Unit>> {
+
+        if(email.isEmpty() || pass.isEmpty()) authStatus.value = Resource.Error("Please fill out all fields")
+
+
+        auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
+            if(it.isSuccessful) authStatus.value = Resource.Success(Unit)
+            else authStatus.value =  Resource.Error(it.exception?.localizedMessage ?: "Unknown Error")
+        }
+        return authStatus
+    }
+
+
+    override fun updateUserName(newName: String) {
+
+    }
+
+    override fun signOut(context: Context?){
+        auth.signOut()
+    }
+
+    override fun setProfilePicture() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun createPost(post: Post?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
