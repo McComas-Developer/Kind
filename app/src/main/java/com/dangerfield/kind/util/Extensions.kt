@@ -1,8 +1,13 @@
 package com.dangerfield.kind.util
 
 import android.app.Activity
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import kotlinx.android.synthetic.main.fragment_search.*
 
 typealias Action = () -> Unit
 
@@ -27,4 +32,30 @@ private val keyboardHider = View.OnFocusChangeListener { view, b ->
 private fun hideKeyboardFrom(view: View) {
     val imm = view.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun EditText.addClearButton(view: View){
+    this.addTextChangedListener(object: TextWatcher {
+        override fun afterTextChanged(p0: Editable?) {}
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            view.showIFF((p0?.length ?: 0) > 0)
+        }
+    })
+
+    view.setOnClickListener {
+        this.text.clear()
+    }
+}
+
+fun EditText.onSearch(action: Action){
+    this.setOnEditorActionListener { _, i, _ ->
+        if(i == EditorInfo.IME_ACTION_SEARCH){
+            action.invoke()
+            this.clearFocus()
+            true
+        }else{false}
+    }
 }

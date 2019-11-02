@@ -1,6 +1,7 @@
 package com.dangerfield.kind.ui.find.search
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
@@ -18,27 +20,26 @@ import com.dangerfield.kind.ui.feed.PostAdapter
 import com.dangerfield.kind.util.hideKeyBoardOnPressAway
 import com.dangerfield.kind.util.showIFF
 import com.dangerfield.kind.api.Resource.*
+import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.util.addClearButton
+import com.dangerfield.kind.util.onSearch
 import kotlinx.android.synthetic.main.fragment_search.*
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class SearchFragment : Fragment() {
 
     private val postAdapter : PostAdapter by lazy { PostAdapter(context!!) }
     private val viewModel : SearchViewModel
             by lazy { ViewModelProviders.of(this).get(SearchViewModel::class.java)}
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         tv_search.requestFocus()
 
         setUpRecyclerView()
@@ -50,39 +51,26 @@ class SearchFragment : Fragment() {
         ib_clear.setOnClickListener { tv_search.text.clear() }
 
         tv_search.hideKeyBoardOnPressAway()
-
-        tv_search.addTextChangedListener(object: TextWatcher{
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                ib_clear.showIFF((p0?.length ?: 0) > 0)
-            }
-        })
-
-        tv_search.setOnEditorActionListener { textView, i, keyEvent ->
-            if(i == EditorInfo.IME_ACTION_SEARCH){
-                viewModel.currentSearchTerm.value = tv_search.text.toString().trim()
-                tv_search.clearFocus()
-                true
-            }else{false}
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        tv_search.addClearButton(ib_clear)
+        tv_search.onSearch {
+            viewModel.currentSearchTerm.value = tv_search.text.toString().trim() }
 
         viewModel.searchResult.observe(viewLifecycleOwner, Observer {
+            pb_search.showIFF(it is Loading)
             when(it){
-                is Success -> {postAdapter.posts = it.data ?: listOf()}
-                is Loading -> {}
-                is Error -> {}
+                is Success -> showResults( it.data ?: listOf())
+
+                is Error -> Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
             }
         })
     }
 
-
+    @SuppressLint("SetTextI18n")
+    private fun showResults(list: List<Post>) {
+        tv_empty.text = "No Search Results Found For: \"${viewModel.currentSearchTerm.value.toString()}\""
+        tv_empty.showIFF(list.isEmpty())
+        postAdapter.posts = list
+    }
 
     private fun setUpRecyclerView() {
         rv_search_post.layoutManager = LinearLayoutManager(activity)
