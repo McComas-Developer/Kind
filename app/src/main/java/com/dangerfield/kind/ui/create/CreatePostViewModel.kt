@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.dangerfield.kind.api.CurrentUser
 import com.dangerfield.kind.api.Resource
 import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.model.Post_api
+import com.dangerfield.kind.util.FakeDataCreator
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
@@ -19,8 +21,13 @@ class CreatePostViewModel : ViewModel() {
         return  profilePic
     }
 
+    fun createFakeData() {
+        val gen = FakeDataCreator(FirebaseFirestore.getInstance(), "timmy123")
+        gen.run()
+    }
+
     fun post(text: String): MutableLiveData<Resource<Boolean>> {
-        val post = Post(
+        val post = Post_api(
                 UUID = UUID.randomUUID().toString(),
                 timeStamp = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(Calendar.getInstance().time),
                 text = text,

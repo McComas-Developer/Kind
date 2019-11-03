@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.model.Post_api
 import com.dangerfield.kind.model.User
 import com.dangerfield.kind.util.Action
 import com.google.android.gms.tasks.OnCompleteListener
@@ -119,7 +120,7 @@ object CurrentUser : UserRepository {
         return uri
     }
 
-    override fun createPost(post: Post, db: FirebaseFirestore) : MutableLiveData<Resource<Boolean>> {
+    override fun createPost(post: Post_api, db: FirebaseFirestore) : MutableLiveData<Resource<Boolean>> {
         val postRequest : MutableLiveData<Resource<Boolean>> = MutableLiveData(Resource.Loading())
 
         getUsername(db) {
@@ -130,7 +131,7 @@ object CurrentUser : UserRepository {
         return postRequest
     }
 
-    fun submitPost(db: FirebaseFirestore, post: Post, postRequest : MutableLiveData<Resource<Boolean>>) {
+    fun submitPost(db: FirebaseFirestore, post: Post_api, postRequest : MutableLiveData<Resource<Boolean>>) {
         db.collection(Endpoints.POPULAR_POSTS).document(post.UUID).set(post).addOnSuccessListener {
 
             db.collection(Endpoints.USERS)

@@ -1,8 +1,7 @@
 package com.dangerfield.kind.util
 
-import com.dangerfield.kind.api.CurrentUser
 import com.dangerfield.kind.api.Endpoints
-import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.model.Post_api
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
@@ -13,7 +12,7 @@ class FakeDataCreator(val db: FirebaseFirestore) {
     lateinit var tags: ArrayList<String>
     lateinit var images: ArrayList<String>
     lateinit var text: ArrayList<String>
-    lateinit var users: ArrayList<String>
+    lateinit var users: Map<String, String>
 
     fun run() {
         build()
@@ -22,9 +21,12 @@ class FakeDataCreator(val db: FirebaseFirestore) {
 
     fun build() {
 
-        users = arrayListOf(
-                "",
-                ""
+        users = mapOf(
+                "CJtjhhwkZjP1fSEHy9MKrv1LsdF3" to "timmy123",
+                "OGm0NsidOwMKjQx4b6eYYvhrhjk2" to "uncle_bob",
+                "PJ5KyopAihZqpckovFIU9iGRHCi2" to "pstar",
+                "biC1DHWtIQPfAvefOkL7nqavLCC3" to "John_Smith",
+                "jJ2T8R231OMZqGGurWqog9AdaoJ3" to "jimmy123"
                 )
 
         tags = arrayListOf("dogs","doggo","kindess","funny","cats","baby","food")
@@ -46,17 +48,21 @@ class FakeDataCreator(val db: FirebaseFirestore) {
 
 
     fun writeDogPosts() {
-        var posts = ArrayList<Post>()
+        var posts = ArrayList<Post_api>()
 
-        for(i in 1..60) {
-            posts.add(Post(
-                    posterUUID = CurrentUser.uid!!,
+        for(i in 1..99) {
+            val randUID = users.keys.random()
+            val randUsername = users[randUID]
+
+            posts.add(Post_api(
+                    posterUUID = randUID,
+                    posterUserName = randUsername!!,
                     UUID = UUID.randomUUID().toString(),
                     tags = (tags.shuffled().drop((0..8).shuffled().first())) ,
                     text = text.random(),
                     timeStamp = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(Calendar.getInstance().time),
                     images = (images.shuffled().drop((0..5).shuffled().first())) ,
-                    hearts = (users.shuffled().drop((0..6).shuffled().first()))
+                    hearts = (users.keys.shuffled().drop((0..4).shuffled().first()))
             ))
         }
 
