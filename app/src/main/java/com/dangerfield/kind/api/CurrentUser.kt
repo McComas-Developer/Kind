@@ -91,6 +91,17 @@ object CurrentUser : UserRepository {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    fun getProfilePic(store: FirebaseStorage): MutableLiveData<Resource<Uri>> {
+        val uri = MutableLiveData<Resource<Uri>>()
+        store.getReference("/user_profile_test/${uid!!}").downloadUrl.addOnSuccessListener {
+            uri.value = Resource.Success(data = it)
+        }.addOnFailureListener {
+            uri.value = Resource.Error(message = it.localizedMessage ?: "Unkown Error")
+        }
+
+        return uri
+    }
+
     override fun createPost(post: Post?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
