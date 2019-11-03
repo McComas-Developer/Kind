@@ -1,13 +1,17 @@
 package com.dangerfield.kind.util
 
 import android.app.Activity
+import android.graphics.Color
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_search.*
+import java.lang.Math.abs
 
 typealias Action = () -> Unit
 
@@ -58,4 +62,23 @@ fun EditText.onSearch(action: Action){
             true
         }else{false}
     }
+}
+
+fun EditText.addCharacterMax(view: TextView, max: Int){
+    filters = arrayOf(InputFilter.LengthFilter(max))
+
+    this.addTextChangedListener(object: TextWatcher {
+        override fun afterTextChanged(p0: Editable?) {}
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            val charsLeft = (max - (p0?.length ?: 0))
+
+            if (charsLeft < 6) view.setTextColor(Color.RED)
+            else view.setTextColor(Color.BLACK)
+
+            view.text = charsLeft.toString()
+        }
+    })
 }

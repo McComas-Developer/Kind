@@ -8,6 +8,7 @@ import com.dangerfield.kind.model.Post
 import com.dangerfield.kind.model.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
@@ -59,13 +60,12 @@ object CurrentUser : UserRepository {
             if(it.isSuccessful){
                 authStatus.value = Resource.Success(true)
                 store.getReference("/user_profile_test/${uid!!}").putFile(profilePicture)
-                db.collection("Users_test").add(User(username, listOf()))
+                db.collection("Users_test").document(uid.toString()).set(User(username, listOf()))
             }else{
                 authStatus.value = Resource.Error(message =it.exception?.localizedMessage ?: "Unknown Error")
             }
         }
     }
-
 
 
     override fun signIn(email: String, pass: String): MutableLiveData<Resource<Boolean>> {
@@ -102,7 +102,22 @@ object CurrentUser : UserRepository {
         return uri
     }
 
-    override fun createPost(post: Post?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun createPost(post: Post, db: FirebaseFirestore) : MutableLiveData<Resource<Boolean>> {
+        val postRequest : MutableLiveData<Resource<Boolean>> = MutableLiveData(Resource.Loading())
+
+        db.collection("Posts_test").document(post.UUID).set(post).addOnSuccessListener {
+
+            db.collection("Users_test")
+                    .document(post.posterUUID)
+                    .update("posts", FieldValue.arrayUnion(post.UUID)).addOnSuccessListener {
+                        postRequest.value = Resource.Success(true)
+                    }.addOnFailureListener {
+                        postRequest.value = Resource.Error(message = it.localizedMessage ?: "Unknown Error")
+                    }
+        }.addOnFailureListener {
+            postRequest.value = Resource.Error(message = it.localizedMessage ?: "Unknown Error")
+        }
+
+        return postRequest
     }
 }

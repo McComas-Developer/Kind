@@ -57,6 +57,7 @@ public class FeedFragment extends Fragment {
             if(pager.getCurrentItem() != 1){
                 pager.setCurrentItem(1);
             }else{
+                //TODO make alert if curent not authorized
                 NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_createPostFragment);
             }
         });

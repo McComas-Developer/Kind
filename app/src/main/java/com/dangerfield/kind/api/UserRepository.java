@@ -35,7 +35,7 @@ public interface UserRepository {
 
     void setProfilePicture();
 
-    void createPost(Post post);
+    LiveData<Resource<Boolean>>  createPost(Post post, FirebaseFirestore db) ;
 
     void updateUserName(String newName);
 
