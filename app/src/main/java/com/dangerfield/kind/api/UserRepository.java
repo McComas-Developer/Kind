@@ -20,16 +20,16 @@ public interface UserRepository {
 
     void getRecentSearches();
 
-//    LiveData<Resource<Unit>> signUp(
-//                            FirebaseFirestore db,
-//                            FirebaseStorage store,
-//                            @Nullable Uri profilePicture,
-//                            String username,
-//                            String email,
-//                            String pass,
-//                            String confirmPass);
+    LiveData<Resource<Unit>> signUp(
+                            FirebaseFirestore db,
+                            FirebaseStorage store,
+                            @Nullable Uri profilePicture,
+                            String username,
+                            String email,
+                            String pass,
+                            String confirmPass);
 
-    LiveData<Resource<Unit>>signIn(String email, String pass);
+    LiveData<Resource<Boolean>>signIn(String email, String pass);
 
     void signOut(Context context);
 

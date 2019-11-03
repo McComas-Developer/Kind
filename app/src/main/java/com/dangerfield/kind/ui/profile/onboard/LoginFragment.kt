@@ -21,8 +21,26 @@ import kotlinx.android.synthetic.main.fragment_login.tv_password
 
 class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by lazy {
-        ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        ViewModelProviders.of(activity!!).get(LoginViewModel::class.java)
     }
+
+     private val loginObserver : Observer<Resource<Boolean>> by lazy {
+         Observer<Resource<Boolean>> {it
+             pb_auth_login.showIFF(it is Resource.Loading)
+             pb_auth_login.visibleContingency(
+                     {btn_submit_log_in.text = ""} ,
+                     {btn_submit_log_in.text = getString(R.string.sign_in)})
+
+             when(it){
+                 is Resource.Success ->
+                     NavHostFragment.findNavController(this).popBackStack()
+                 is Resource.Error ->{
+                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                     btn_submit_log_in.isClickable = true
+                 }
+             }
+         }
+     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -33,32 +51,20 @@ class LoginFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         btn_submit_log_in.setOnClickListener {
-            it.isClickable = false
-            signIn(
-                    tv_email.text.toString().trim(),
-                    tv_password.text.toString().trim()
-            )
+            signIn(tv_email.text.toString().trim(), tv_password.text.toString().trim())
         }
 
         listOf<View>(tv_email,tv_password).forEach{it.hideKeyBoardOnPressAway()}
-
-        viewModel.loginStatus.observe(viewLifecycleOwner, Observer {
-            pb_auth_login.showIFF(it is Resource.Loading)
-            pb_auth_login.visibleContingency(
-                    {btn_submit_log_in.text = ""} ,
-                    {btn_submit_log_in.text = getString(R.string.sign_in)})
-
-            when(it){
-                is Resource.Success ->
-                    NavHostFragment.findNavController(this).popBackStack()
-                is Resource.Error ->{
-                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-                    btn_submit_log_in.isClickable = true
-                }
-            }
-        })
     }
 
-
-    private fun signIn(email: String, password: String) { viewModel.login(email,password) }
+    private fun signIn(email: String, password: String) {
+        btn_submit_log_in.isClickable = false
+        when(val request = viewModel.login(email,password)){
+            is Resource.Success -> request.data?.observe(viewLifecycleOwner,loginObserver)
+            is Resource.Error ->{
+                btn_submit_log_in.isClickable = true
+                Toast.makeText(context, request.message, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 }

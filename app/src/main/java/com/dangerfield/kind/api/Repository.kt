@@ -20,7 +20,7 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
                     list?.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
                     tagPosts.value = Success(list)
                 }.addOnFailureListener {
-                    tagPosts.value = Error(it.localizedMessage ?: "Unknown Error")
+                    tagPosts.value = Error(message =it.localizedMessage ?: "Unknown Error")
                 }
         return tagPosts
     }
