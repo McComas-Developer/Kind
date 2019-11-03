@@ -5,11 +5,14 @@ import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 
+
 import com.dangerfield.kind.model.Post;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import javax.annotation.Nullable;
+
+import kotlin.Unit;
 
 public interface UserRepository {
 
@@ -17,7 +20,7 @@ public interface UserRepository {
 
     void getRecentSearches();
 
-    Result<LiveData<Status>, ErrorMessage > signUp(
+    LiveData<Resource<Boolean>> signUp(
                             FirebaseFirestore db,
                             FirebaseStorage store,
                             @Nullable Uri profilePicture,
@@ -26,7 +29,7 @@ public interface UserRepository {
                             String pass,
                             String confirmPass);
 
-    Result<LiveData<Status>, ErrorMessage > signIn(String email, String pass);
+    LiveData<Resource<Boolean>>signIn(String email, String pass);
 
     void signOut(Context context);
 

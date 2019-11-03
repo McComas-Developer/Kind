@@ -16,7 +16,7 @@ import com.dangerfield.kind.model.LikedState
 import com.dangerfield.kind.model.Post
 import kotlinx.android.synthetic.main.item_feed_post.view.*
 
-class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
+class PostAdapter(context: Context) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
     var posts = listOf<Post>()
         set(value) {

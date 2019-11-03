@@ -9,7 +9,7 @@ interface KindRepository {
 
     fun getPopularPosts()
 
-    fun getPostsWithTag(tag: String) : MutableLiveData<List<Post>>
+    //fun getPostsWithTag(tag: String) : MutableLiveData<List<Post>>
 
     fun searchPosts(term: String)
 
