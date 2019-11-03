@@ -45,7 +45,6 @@ public class ProfileFragment extends Fragment {
         collapsing_toolbar.setExpandedTitleTypeface(
                 Typeface.create(collapsing_toolbar.getExpandedTitleTypeface(), Typeface.BOLD)
         );
-
     }
 
     private void showOnBoarding(View view) {

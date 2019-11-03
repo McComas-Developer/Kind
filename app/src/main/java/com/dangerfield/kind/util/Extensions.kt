@@ -12,6 +12,9 @@ import android.widget.EditText
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_search.*
 import java.lang.Math.abs
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 typealias Action = () -> Unit
 
@@ -81,4 +84,15 @@ fun EditText.addCharacterMax(view: TextView, max: Int){
             view.text = charsLeft.toString()
         }
     })
+}
+
+fun String.toReadableDate(): String {
+    val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
+    var date: Date? = null
+    try {
+        date = formatter.parse(this)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return date.toString().dropLast(18)
 }

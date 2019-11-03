@@ -27,6 +27,7 @@ class CreatePostViewModel : ViewModel() {
                 images = listOf(),
                 posterUUID = CurrentUser.uid!!
                 )
+
         return CurrentUser.createPost(post, FirebaseFirestore.getInstance())
     }
 }

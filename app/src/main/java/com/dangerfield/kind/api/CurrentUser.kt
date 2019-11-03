@@ -6,12 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.Post
 import com.dangerfield.kind.model.User
+import com.dangerfield.kind.util.Action
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import java.util.function.Function
 
 object CurrentUser : UserRepository {
 
@@ -49,8 +52,16 @@ object CurrentUser : UserRepository {
 
     }
 
+    fun getUsername(db : FirebaseFirestore, onComplete: (text: String) -> Unit) {
+        db.collection(Endpoints.USERS).document(this.uid!!).get().addOnSuccessListener {
+            it.data?.get("username")?.toString()?.let {text ->
+                onComplete(text)
+            }
+        }
+    }
+
     private fun checkUserNameTaken(db: FirebaseFirestore, username: String): Task<QuerySnapshot> {
-       return db.collection("Users_test").whereEqualTo("username", username).get()
+       return db.collection(Endpoints.USERS).whereEqualTo("username", username).get()
     }
 
 
@@ -60,7 +71,7 @@ object CurrentUser : UserRepository {
             if(it.isSuccessful){
                 authStatus.value = Resource.Success(true)
                 store.getReference("/user_profile_test/${uid!!}").putFile(profilePicture)
-                db.collection("Users_test").document(uid.toString()).set(User(username, listOf()))
+                db.collection(Endpoints.USERS).document(uid.toString()).set(User(username, listOf()))
             }else{
                 authStatus.value = Resource.Error(message =it.exception?.localizedMessage ?: "Unknown Error")
             }
@@ -87,8 +98,14 @@ object CurrentUser : UserRepository {
         auth.signOut()
     }
 
-    override fun setProfilePicture() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun setProfilePicture(store: FirebaseStorage, profilePicture: Uri): MutableLiveData<Resource<Boolean>> {
+        val status : MutableLiveData<Resource<Boolean>> = MutableLiveData(Resource.Loading())
+        store.getReference("/user_profile_test/${uid!!}").putFile(profilePicture).addOnSuccessListener {
+            status.value = Resource.Success(true)
+        }.addOnFailureListener {
+            status.value =  Resource.Error(message =it.localizedMessage ?: "Unknown Error")
+        }
+        return status
     }
 
     fun getProfilePic(store: FirebaseStorage): MutableLiveData<Resource<Uri>> {
@@ -105,9 +122,18 @@ object CurrentUser : UserRepository {
     override fun createPost(post: Post, db: FirebaseFirestore) : MutableLiveData<Resource<Boolean>> {
         val postRequest : MutableLiveData<Resource<Boolean>> = MutableLiveData(Resource.Loading())
 
-        db.collection("Posts_test").document(post.UUID).set(post).addOnSuccessListener {
+        getUsername(db) {
+            post.posterUserName = it
+            submitPost(db, post, postRequest)
+        }
 
-            db.collection("Users_test")
+        return postRequest
+    }
+
+    fun submitPost(db: FirebaseFirestore, post: Post, postRequest : MutableLiveData<Resource<Boolean>>) {
+        db.collection(Endpoints.POPULAR_POSTS).document(post.UUID).set(post).addOnSuccessListener {
+
+            db.collection(Endpoints.USERS)
                     .document(post.posterUUID)
                     .update("posts", FieldValue.arrayUnion(post.UUID)).addOnSuccessListener {
                         postRequest.value = Resource.Success(true)
@@ -117,7 +143,5 @@ object CurrentUser : UserRepository {
         }.addOnFailureListener {
             postRequest.value = Resource.Error(message = it.localizedMessage ?: "Unknown Error")
         }
-
-        return postRequest
     }
 }
