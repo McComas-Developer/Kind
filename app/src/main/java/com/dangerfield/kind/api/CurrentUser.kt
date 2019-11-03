@@ -15,7 +15,7 @@ import com.google.firebase.storage.FirebaseStorage
 object CurrentUser : UserRepository {
 
     private var auth = FirebaseAuth.getInstance()
-    private var authStatus = MutableLiveData<Resource<Unit>>()
+    private var authStatus = MutableLiveData<Resource<Boolean>>()
     val uid: String? get() {return auth.currentUser?.uid}
     val isAuthenticated: Boolean get() { return auth.currentUser != null }
 
@@ -32,16 +32,8 @@ object CurrentUser : UserRepository {
                         email: String,
                         pass: String,
                         confirmPass: String)
-            : LiveData<Resource<Unit>> {
+            : LiveData<Resource<Boolean>> {
 
-        if(email.isEmpty() || pass.isEmpty() || confirmPass.isEmpty())
-            authStatus.value = Resource.Error(message = "Please fill out all fields")
-        if(username.contains(" "))
-            authStatus.value = Resource.Error(message = "Please remove spaces from username")
-        if(pass != confirmPass)
-            authStatus.value = Resource.Error(message ="Passwords do not match, please try again")
-        if(profilePicture == null)
-            authStatus.value = Resource.Error(message ="Please Select Profile Picture")
 
         authStatus.value = Resource.Loading()
 
@@ -65,7 +57,7 @@ object CurrentUser : UserRepository {
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if(it.isSuccessful){
-                authStatus.value = Resource.Success(Unit)
+                authStatus.value = Resource.Success(true)
                 store.getReference("/user_profile_test/${uid!!}").putFile(profilePicture)
                 db.collection("Users_test").add(User(username, listOf()))
             }else{

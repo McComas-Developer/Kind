@@ -20,7 +20,7 @@ public interface UserRepository {
 
     void getRecentSearches();
 
-    LiveData<Resource<Unit>> signUp(
+    LiveData<Resource<Boolean>> signUp(
                             FirebaseFirestore db,
                             FirebaseStorage store,
                             @Nullable Uri profilePicture,
