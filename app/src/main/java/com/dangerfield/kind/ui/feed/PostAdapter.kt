@@ -40,6 +40,7 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
         val heartButton: ImageButton = view.btn_heart
         val timeStamp : TextView = view.tv_post_date
         val username : TextView = view.tv_post_username
+        val heartsCount : TextView = view.tv_hearts_count
 
         init {
             heartButton.setOnClickListener { toggleHeart(adapterPosition) }
@@ -111,6 +112,7 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     }
 
     private fun setPostText(post: Post, holder: ViewHolder) {
+        holder.heartsCount.text = getCountText(post.hearts.size)
         holder.timeStamp.text = post.timeStamp.toReadableDate()
         holder.username.text = post.posterUserName
         holder.title.text = when (post.expandedState) {
@@ -129,6 +131,14 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
                 holder.moreButton.visibility = View.INVISIBLE
                 post.text
             }
+        }
+    }
+
+    private fun getCountText(size: Int): String {
+        return if(size > 0) {
+            "${size} hearts"
+        }else{
+            "Be the first to like"
         }
     }
 

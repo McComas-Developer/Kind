@@ -19,6 +19,7 @@ import com.dangerfield.kind.api.CurrentUser
 import com.dangerfield.kind.api.Resource
 import com.dangerfield.kind.util.addCharacterMax
 import com.dangerfield.kind.util.hideKeyBoardOnPressAway
+import com.dangerfield.kind.util.showIFF
 import kotlinx.android.synthetic.main.fragment_create_post.*
 
 class CreatePostFragment : Fragment() {
@@ -47,10 +48,15 @@ class CreatePostFragment : Fragment() {
     }
 
     private fun post() {
+        btn_post.isClickable = false
         viewModel.post(tv_post_text.text.toString()).observe(viewLifecycleOwner, Observer {
+            pb_create_post.showIFF(it is Resource.Loading)
             when(it){
                 is Resource.Success -> navigateBack()
-                is Resource.Error -> Toast.makeText(context!!, it.message, Toast.LENGTH_LONG).show()
+                is Resource.Error -> {
+                    Toast.makeText(context!!, it.message, Toast.LENGTH_LONG).show()
+                    btn_post.isClickable = true
+                }
             }
         })
     }
