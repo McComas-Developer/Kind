@@ -9,16 +9,16 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import com.dangerfield.kind.R;
 import com.dangerfield.kind.api.Resource;
+import com.dangerfield.kind.util.ExtensionsKt;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-
-import java.util.ArrayList;
 
 public class FeedFragment extends Fragment {
 
@@ -26,8 +26,8 @@ public class FeedFragment extends Fragment {
     private RecyclerView feedRecyclerView;
     private PostAdapter feedAdapter;
     private ImageView createPostButton;
+    private ProgressBar pb_feed;
     private CollapsingToolbarLayout collapsing_toolbar;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +36,7 @@ public class FeedFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_feed, container, false);
         collapsing_toolbar = v.findViewById(R.id.collapsing_toolbar);
         feedRecyclerView = v.findViewById(R.id.rv_feed);
+        pb_feed = v.findViewById(R.id.pb_feed);
         return v;
     }
 
@@ -63,16 +64,14 @@ public class FeedFragment extends Fragment {
         viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         viewModel.getPostWithTag("dogs").observe(this, result -> {
-            if(result instanceof Resource.Error){
-                //show error
-            }else if(result instanceof  Resource.Loading){
-                //show loading
+            ExtensionsKt.showIFF(pb_feed, result instanceof Resource.Loading);
 
+            if(result instanceof Resource.Error){
+                Toast.makeText(getContext(), result.getMessage(), Toast.LENGTH_LONG).show();
             }else if(result instanceof Resource.Success && result.getData() != null){
                 feedAdapter.setPosts(result.getData());
             }
         });
-
     }
 
     private void setUpRecyclerView() {
