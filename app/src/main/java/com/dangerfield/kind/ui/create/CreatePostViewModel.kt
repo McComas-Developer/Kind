@@ -21,11 +21,6 @@ class CreatePostViewModel : ViewModel() {
         return  profilePic
     }
 
-    fun createFakeData() {
-        val gen = FakeDataCreator(FirebaseFirestore.getInstance(), "timmy123")
-        gen.run()
-    }
-
     fun post(text: String): MutableLiveData<Resource<Boolean>> {
         val post = Post_api(
                 UUID = UUID.randomUUID().toString(),

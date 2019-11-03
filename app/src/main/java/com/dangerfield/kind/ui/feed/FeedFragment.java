@@ -17,8 +17,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.dangerfield.kind.R;
+import com.dangerfield.kind.api.CurrentUser;
 import com.dangerfield.kind.api.Resource;
 import com.dangerfield.kind.model.Post;
+import com.dangerfield.kind.util.AlertFactory;
 import com.dangerfield.kind.util.ExtensionsKt;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -89,8 +91,12 @@ public class FeedFragment extends Fragment {
             if(pager.getCurrentItem() != 1){
                 pager.setCurrentItem(1);
             }else{
-                //TODO make alert if curent not authorized
-                NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_createPostFragment);
+                if(CurrentUser.INSTANCE.isAuthenticated()){
+                    NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_createPostFragment);
+                }else{
+                   pager.setCurrentItem(2);
+                }
+
             }
         });
     }
