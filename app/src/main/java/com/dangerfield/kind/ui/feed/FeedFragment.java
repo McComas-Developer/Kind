@@ -4,28 +4,35 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+import androidx.room.Room;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.dangerfield.kind.R;
+import com.dangerfield.kind.db.LikeIDDatabase;
+import com.dangerfield.kind.model.LikeID;
+import com.dangerfield.kind.model.Post;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FeedFragment extends Fragment {
 
-    private FeedViewModel viewModel;
-    private RecyclerView feedRecyclerView;
-    private FeedAdapter feedAdapter;
     private ImageView createPostButton;
     private CollapsingToolbarLayout collapsing_toolbar;
+
+    private RecyclerView rv;
+    private FeedAdapter fa;
+    private FeedViewModel fvm;
 
 
     @Override
@@ -34,7 +41,7 @@ public class FeedFragment extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_feed, container, false);
         collapsing_toolbar = v.findViewById(R.id.collapsing_toolbar);
-        feedRecyclerView = v.findViewById(R.id.rv_feed);
+        rv = v.findViewById(R.id.rv_feed);
         return v;
     }
 
@@ -42,11 +49,18 @@ public class FeedFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setUpRecyclerView();
-
         collapsing_toolbar.setExpandedTitleTypeface(
                 Typeface.create(collapsing_toolbar.getExpandedTitleTypeface(), Typeface.BOLD)
         );
+
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        fa = new FeedAdapter(getContext(), new ArrayList<Post>());
+        rv.setAdapter(fa);
+
+        fvm = ViewModelProviders.of(this).get(FeedViewModel.class);
+        fvm.getPosts().observe(getViewLifecycleOwner(), posts -> {
+            fa.setPosts(posts);
+        });
 
         createPostButton = getActivity().findViewById(R.id.vst_center_image);
         ViewPager pager =  getActivity().findViewById(R.id.pager);
@@ -59,19 +73,10 @@ public class FeedFragment extends Fragment {
             }
         });
 
-        viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
+        LikeIDDatabase db = Room.databaseBuilder(getContext(),
+                LikeIDDatabase.class, "likeIDTable").build();
+        LikeID likeIDTable = new LikeID("");
+        likeIDTable.setId("Whats up");
 
-        viewModel.getPostWithTag("dogs").observe(this, updates -> {
-            Log.d("posts","received " + updates.size() + " posts from firebase");
-            feedAdapter.setPosts(updates);
-        });
-
-    }
-
-    private void setUpRecyclerView() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        feedRecyclerView.setLayoutManager(layoutManager);
-        feedAdapter = new FeedAdapter(getActivity(), new ArrayList<>());
-        feedRecyclerView.setAdapter(feedAdapter);
     }
 }
