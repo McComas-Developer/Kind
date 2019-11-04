@@ -9,13 +9,17 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.dangerfield.kind.R
+import com.dangerfield.kind.db.LikeIDDatabase
 import com.dangerfield.kind.model.ExpandedState
+import com.dangerfield.kind.model.LikeID
 import com.dangerfield.kind.model.LikedState
 import com.dangerfield.kind.model.Post
 import com.dangerfield.kind.util.toReadableDate
 import kotlinx.android.synthetic.main.item_feed_post.view.*
+import java.security.AccessController.getContext
 
 class PostAdapter(context: Context, private val viewModel: PostViewModel) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
@@ -51,10 +55,23 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     }
 
     private fun toggleHeart(position: Int) {
+//        val db = Room.inMemoryDatabaseBuilder(
+//                context, LikeIDDatabase::class.java).allowMainThreadQueries().build()
+//        val likeIDTable = db.articleDao()
+//        val postsList = likeIDTable.getAll()
+//
+//        posts[position].likedState = when(postsList.contains(posts[position].UUID)) {
+//            true -> {LikedState.UNLIKED}
+//            false -> LikedState.LIKED
+//        }
+//        when(posts[position].likedState) {
+//            LikedState.LIKED -> { likeIDTable.insert(LikeID(posts[position].UUID)) }
+//            LikedState.UNLIKED -> { likeIDTable.delete(LikeID(posts[position].UUID)) }
+//        }
         posts[position].likedState = when(posts[position].likedState) {
                 LikedState.LIKED -> {LikedState.UNLIKED}
                 LikedState.UNLIKED -> LikedState.LIKED
-            }
+        }
 
         notifyDataSetChanged()
     }

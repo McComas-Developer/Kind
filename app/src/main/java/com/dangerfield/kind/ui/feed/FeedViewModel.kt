@@ -19,10 +19,8 @@ class FeedViewModel : ViewModel(), PostViewModel {
         if(tagPosts.value?.data.isNullOrEmpty()){
             tagPosts = repository.getPopularPosts()
         }
-        return posts
+        return tagPosts
     }
-
-}
 
     fun refreshFeed() { tagPosts = repository.getPopularPosts(refreshing = true) }
 

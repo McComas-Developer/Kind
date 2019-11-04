@@ -16,6 +16,13 @@ interface LikeDAO {
      *
      * inserts passed likeID into database
      */
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    fun insert(likeID: String)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(likeID: LikeID)
+
+    /**
+     *
+     * deletes passed likeID from database
+     */
+    @Delete
+    fun delete(likeID: LikeID)
 }
