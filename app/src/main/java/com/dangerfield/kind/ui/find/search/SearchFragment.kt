@@ -17,12 +17,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dangerfield.kind.R
 import com.dangerfield.kind.ui.feed.PostAdapter
-import com.dangerfield.kind.util.hideKeyBoardOnPressAway
-import com.dangerfield.kind.util.showIFF
 import com.dangerfield.kind.api.Resource.*
 import com.dangerfield.kind.model.Post
-import com.dangerfield.kind.util.addClearButton
-import com.dangerfield.kind.util.onSearch
+import com.dangerfield.kind.util.*
 import kotlinx.android.synthetic.main.fragment_search.*
 
 
@@ -40,8 +37,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tv_search.requestFocus()
-
         setUpRecyclerView()
 
         btn_back.setOnClickListener {
@@ -55,14 +50,19 @@ class SearchFragment : Fragment() {
         tv_search.onSearch {
             viewModel.currentSearchTerm.value = tv_search.text.toString().trim() }
 
-        viewModel.searchResult.observe(viewLifecycleOwner, Observer {
-            pb_search.showIFF(it is Loading)
-            when(it){
-                is Success -> showResults( it.data ?: listOf())
+        viewModel.searchResult.observe(viewLifecycleOwner, Observer { searchResquest ->
+            pb_search.showIFF(searchResquest is Loading)
+            when(searchResquest){
+                is Success -> showResults( searchResquest.data ?: listOf())
 
-                is Error -> Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                is Error -> Toast.makeText(context, searchResquest.message, Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tv_search.openKeyboard()
     }
 
     @SuppressLint("SetTextI18n")
