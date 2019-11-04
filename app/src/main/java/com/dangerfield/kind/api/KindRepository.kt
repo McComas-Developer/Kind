@@ -5,15 +5,9 @@ import com.dangerfield.kind.model.Post
 
 interface KindRepository {
 
-    fun post(withPost: Post)
+    fun getPopularPosts(refreshing: Boolean = false) : MutableLiveData<Resource<List<Post>>>
 
-    fun getPopularPosts()
-
-    //fun getPostsWithTag(tag: String) : MutableLiveData<List<Post>>
+    fun getPostsWithTag(tag: String, refreshing: Boolean = false) : MutableLiveData<Resource<List<Post>>>
 
     fun searchPosts(term: String)
-
-    fun createUser()
-
-    fun setProfilePicture(file: String)
 }

@@ -5,12 +5,17 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.model.Post_api
 import com.dangerfield.kind.model.User
+import com.dangerfield.kind.util.Action
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import java.util.function.Function
 
 object CurrentUser : UserRepository {
 
@@ -48,8 +53,16 @@ object CurrentUser : UserRepository {
 
     }
 
+    fun getUsername(db : FirebaseFirestore, onComplete: (text: String) -> Unit) {
+        db.collection(Endpoints.USERS).document(this.uid!!).get().addOnSuccessListener {
+            it.data?.get("username")?.toString()?.let {text ->
+                onComplete(text)
+            }
+        }
+    }
+
     private fun checkUserNameTaken(db: FirebaseFirestore, username: String): Task<QuerySnapshot> {
-       return db.collection("Users_test").whereEqualTo("username", username).get()
+       return db.collection(Endpoints.USERS).whereEqualTo("username", username).get()
     }
 
 
@@ -59,13 +72,12 @@ object CurrentUser : UserRepository {
             if(it.isSuccessful){
                 authStatus.value = Resource.Success(true)
                 store.getReference("/user_profile_test/${uid!!}").putFile(profilePicture)
-                db.collection("Users_test").add(User(username, listOf()))
+                db.collection(Endpoints.USERS).document(uid.toString()).set(User(username, listOf()))
             }else{
                 authStatus.value = Resource.Error(message =it.exception?.localizedMessage ?: "Unknown Error")
             }
         }
     }
-
 
 
     override fun signIn(email: String, pass: String): MutableLiveData<Resource<Boolean>> {
@@ -87,11 +99,50 @@ object CurrentUser : UserRepository {
         auth.signOut()
     }
 
-    override fun setProfilePicture() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun setProfilePicture(store: FirebaseStorage, profilePicture: Uri): MutableLiveData<Resource<Boolean>> {
+        val status : MutableLiveData<Resource<Boolean>> = MutableLiveData(Resource.Loading())
+        store.getReference("/user_profile_test/${uid!!}").putFile(profilePicture).addOnSuccessListener {
+            status.value = Resource.Success(true)
+        }.addOnFailureListener {
+            status.value =  Resource.Error(message =it.localizedMessage ?: "Unknown Error")
+        }
+        return status
     }
 
-    override fun createPost(post: Post?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun getProfilePic(store: FirebaseStorage): MutableLiveData<Resource<Uri>> {
+        val uri = MutableLiveData<Resource<Uri>>()
+        store.getReference("/user_profile_test/${uid!!}").downloadUrl.addOnSuccessListener {
+            uri.value = Resource.Success(data = it)
+        }.addOnFailureListener {
+            uri.value = Resource.Error(message = it.localizedMessage ?: "Unkown Error")
+        }
+
+        return uri
+    }
+
+    override fun createPost(post: Post_api, db: FirebaseFirestore) : MutableLiveData<Resource<Boolean>> {
+        val postRequest : MutableLiveData<Resource<Boolean>> = MutableLiveData(Resource.Loading())
+
+        getUsername(db) {
+            post.posterUserName = it
+            submitPost(db, post, postRequest)
+        }
+
+        return postRequest
+    }
+
+    fun submitPost(db: FirebaseFirestore, post: Post_api, postRequest : MutableLiveData<Resource<Boolean>>) {
+        db.collection(Endpoints.POPULAR_POSTS).document(post.UUID).set(post).addOnSuccessListener {
+
+            db.collection(Endpoints.USERS)
+                    .document(post.posterUUID)
+                    .update("posts", FieldValue.arrayUnion(post.UUID)).addOnSuccessListener {
+                        postRequest.value = Resource.Success(true)
+                    }.addOnFailureListener {
+                        postRequest.value = Resource.Error(message = it.localizedMessage ?: "Unknown Error")
+                    }
+        }.addOnFailureListener {
+            postRequest.value = Resource.Error(message = it.localizedMessage ?: "Unknown Error")
+        }
     }
 }

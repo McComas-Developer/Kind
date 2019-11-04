@@ -7,8 +7,12 @@ import androidx.lifecycle.LiveData;
 
 
 import com.dangerfield.kind.model.Post;
+import com.dangerfield.kind.model.Post_api;
+import com.dangerfield.kind.util.ExtensionsKt.*;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -33,9 +37,9 @@ public interface UserRepository {
 
     void signOut(Context context);
 
-    void setProfilePicture();
+    LiveData<Resource<Boolean>> setProfilePicture(FirebaseStorage store, Uri profilePicture);
 
-    void createPost(Post post);
+    LiveData<Resource<Boolean>>  createPost(Post_api post, FirebaseFirestore db) ;
 
     void updateUserName(String newName);
 

@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : Fragment() {
 
-    private val postAdapter : PostAdapter by lazy { PostAdapter(context!!) }
+    private val postAdapter : PostAdapter by lazy { PostAdapter(context!!, viewModel) }
     private val viewModel : SearchViewModel
             by lazy { ViewModelProviders.of(this).get(SearchViewModel::class.java)}
 

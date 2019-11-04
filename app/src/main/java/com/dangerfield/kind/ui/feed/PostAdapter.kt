@@ -14,9 +14,10 @@ import com.dangerfield.kind.R
 import com.dangerfield.kind.model.ExpandedState
 import com.dangerfield.kind.model.LikedState
 import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.util.toReadableDate
 import kotlinx.android.synthetic.main.item_feed_post.view.*
 
-class PostAdapter(context: Context) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
+class PostAdapter(context: Context, private val viewModel: PostViewModel) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
     var posts = listOf<Post>()
         set(value) {
@@ -37,6 +38,9 @@ class PostAdapter(context: Context) : RecyclerView.Adapter<PostAdapter.ViewHolde
         val posterImage: ImageView = view.iv_post_profile_pic
         val moreButton: TextView = view.tv_more
         val heartButton: ImageButton = view.btn_heart
+        val timeStamp : TextView = view.tv_post_date
+        val username : TextView = view.tv_post_username
+        val heartsCount : TextView = view.tv_hearts_count
 
         init {
             heartButton.setOnClickListener { toggleHeart(adapterPosition) }
@@ -86,11 +90,12 @@ class PostAdapter(context: Context) : RecyclerView.Adapter<PostAdapter.ViewHolde
     }
 
     private fun setPostProfilePic(post: Post, holder: ViewHolder) {
-        Glide.with(holder.posterImage.context)
-                .load("https://firebasestorage.googleapis.com/v0/b/kind-af233.appspot.com/o/user_profiles_test%2F636050436856130987-GTY-580014564-83556690.jpeg?alt=media&token=26a644f6-42dc-449e-8bc7-a660fe055383")
-                .placeholder(R.color.colorPrimary)
-                .centerCrop()
-                .into(holder.posterImage)
+        viewModel.getPosterProfilePic(post.posterUUID) {
+            Glide.with(holder.posterImage)
+                    .load(it)
+                    .centerCrop()
+                    .into(holder.posterImage)
+        }
     }
 
     private fun setPostImage(post: Post, holder: ViewHolder) {
@@ -107,6 +112,9 @@ class PostAdapter(context: Context) : RecyclerView.Adapter<PostAdapter.ViewHolde
     }
 
     private fun setPostText(post: Post, holder: ViewHolder) {
+        holder.heartsCount.text = getCountText(post.hearts.size)
+        holder.timeStamp.text = post.timeStamp.toReadableDate()
+        holder.username.text = post.posterUserName
         holder.title.text = when (post.expandedState) {
             ExpandedState.COLLAPSED -> {
                 Log.d("expanded", "GOT HERE")
@@ -123,6 +131,14 @@ class PostAdapter(context: Context) : RecyclerView.Adapter<PostAdapter.ViewHolde
                 holder.moreButton.visibility = View.INVISIBLE
                 post.text
             }
+        }
+    }
+
+    private fun getCountText(size: Int): String {
+        return if(size > 0) {
+            "${size} hearts"
+        }else{
+            "Be the first to like"
         }
     }
 

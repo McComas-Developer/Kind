@@ -1,20 +1,27 @@
 package com.dangerfield.kind.api
 
+import android.net.Uri
+import android.view.View
 import com.dangerfield.kind.api.Resource.*
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.ExpandedState
 import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.model.User
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
 
 class Repository(private val db: FirebaseFirestore) : KindRepository {
 
     private val tagPosts = MutableLiveData<Resource<List<Post>>>()
+    private val feedPosts = MutableLiveData<Resource<List<Post>>>()
 
-    fun getPostsWithTag(tag: String):  MutableLiveData<Resource<List<Post>>> {
 
-        tagPosts.value = Loading()
+    override fun getPostsWithTag(tag: String, refreshing : Boolean):  MutableLiveData<Resource<List<Post>>> {
 
-        db.collection("Posts_test").whereArrayContains("tags",tag)
+        tagPosts.value = if (refreshing) Loading(refreshing = true) else Loading()
+
+        db.collection(Endpoints.POPULAR_POSTS).whereArrayContains("tags",tag)
                 .get().addOnCompleteListener {data ->
                     val list = data.result?.toObjects(Post::class.java) as List<Post>
                     list?.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
@@ -25,17 +32,21 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
         return tagPosts
     }
 
-    override fun post(withPost: Post) {
-        db.collection("Posts_test").document(withPost.UUID).set(withPost).addOnCompleteListener {
-            //TODO let user know its been posted
-        }
-    }
+    override fun getPopularPosts(refreshing: Boolean) : MutableLiveData<Resource<List<Post>>>  {
+        feedPosts.value = if (refreshing) Loading(refreshing = true) else Loading()
 
-    override fun getPopularPosts() {
-        /**
-         * @We can either use serverless function to create popular collection every hour
-         * or get all of the posts and order them by hearts
-         */
+        db.collection(Endpoints.POPULAR_POSTS)
+                .orderBy("timeStamp", Query.Direction.DESCENDING).limit(50)
+                .get()
+                .addOnCompleteListener {data ->
+                    val list = data.result?.toObjects(Post::class.java) as List<Post>
+                    list?.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
+                    feedPosts.value = Success(list)
+                }.addOnFailureListener {
+                    feedPosts.value = Error(message =it.localizedMessage ?: "Unknown Error")
+                }
+
+        return feedPosts
     }
 
     override fun searchPosts(term: String) {
@@ -44,14 +55,9 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
         //to tag photos
     }
 
-    override fun createUser() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        //set up auth and create user. assign user variable to that. Ideally
-        //we can have some singlton to represent the user. THere should only ever be one user signed in at any give time
-    }
-
-    override fun setProfilePicture(file: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        //get the users UUID, unser user_profiles_test/UUID/ replace the current image of them
+    fun getProfilePicture(store: FirebaseStorage, uid: String, onComplete: (uri: Uri) -> Unit) {
+        store.getReference("/user_profile_test/" + uid).downloadUrl.addOnSuccessListener {
+            onComplete.invoke(it)
+        }
     }
 }
