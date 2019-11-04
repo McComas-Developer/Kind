@@ -17,9 +17,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import com.dangerfield.kind.R
-import com.dangerfield.kind.api.Error
-import com.dangerfield.kind.api.Status
-import com.dangerfield.kind.api.Success
+import com.dangerfield.kind.api.Resource
+
 import com.dangerfield.kind.util.hideKeyBoardOnPressAway
 import com.dangerfield.kind.util.showIFF
 import com.dangerfield.kind.util.visibleContingency
@@ -32,7 +31,7 @@ class SignUpFragment : Fragment() {
     private val viewModel: SignUpViewModel by lazy {
         ViewModelProviders.of(this).get(SignUpViewModel::class.java)
     }
-    lateinit var statusObserver: Observer<Status>
+    lateinit var statusObserver: Observer<Resource<Boolean>>
     val IMAGE_REQ_CODE = 0
     var profilePicture: Uri? = null
 
@@ -67,14 +66,13 @@ class SignUpFragment : Fragment() {
 
     private fun setStatusObserver() {
         statusObserver = Observer {
-            pb_auth.showIFF(it is Status.LOADING)
+            pb_auth.showIFF(it is Resource.Loading)
             pb_auth.visibleContingency({btn_sign_up.text = ""} , {btn_sign_up.text = getString(R.string.sign_up)})
 
             when(it){
-                is Status.LOADING -> {}//no op
-                is Status.SUCCESS ->
+                is Resource.Success ->
                     NavHostFragment.findNavController(this).popBackStack()
-                is Status.FAILURE ->{
+                is Resource.Error->{
                     btn_sign_up.isClickable = true
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 }
@@ -112,8 +110,8 @@ class SignUpFragment : Fragment() {
 
     private fun signUp(username: String, email: String, password: String, confirmPassword: String) {
 
-        val result
-                = viewModel.createUser(
+        val result =
+                viewModel.createUser(
                 profilePicture,
                 username,
                 email,
@@ -122,11 +120,10 @@ class SignUpFragment : Fragment() {
         )
 
         when (result) {
-            is Success ->{
-                result.value.observe(viewLifecycleOwner, statusObserver)
-            }
-            is Error ->{
-                Toast.makeText(context, result.value.message, Toast.LENGTH_LONG).show()
+            is Resource.Success -> result.data?.observe(viewLifecycleOwner, statusObserver)
+
+            is Resource.Error ->{
+                Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
                 btn_sign_up.isClickable = true
             }
 
