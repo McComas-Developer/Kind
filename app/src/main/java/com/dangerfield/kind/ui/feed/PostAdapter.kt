@@ -55,22 +55,15 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     }
 
     private fun toggleHeart(position: Int) {
-//        val db = Room.inMemoryDatabaseBuilder(
-//                context, LikeIDDatabase::class.java).allowMainThreadQueries().build()
-//        val likeIDTable = db.articleDao()
-//        val postsList = likeIDTable.getAll()
-//
-//        posts[position].likedState = when(postsList.contains(posts[position].UUID)) {
-//            true -> {LikedState.UNLIKED}
-//            false -> LikedState.LIKED
-//        }
-//        when(posts[position].likedState) {
-//            LikedState.LIKED -> { likeIDTable.insert(LikeID(posts[position].UUID)) }
-//            LikedState.UNLIKED -> { likeIDTable.delete(LikeID(posts[position].UUID)) }
-//        }
         posts[position].likedState = when(posts[position].likedState) {
-                LikedState.LIKED -> {LikedState.UNLIKED}
-                LikedState.UNLIKED -> LikedState.LIKED
+                LikedState.LIKED -> {
+                    viewModel.unlikePost(posts[position].UUID, context)
+                    LikedState.UNLIKED
+                }
+                LikedState.UNLIKED -> {
+                    viewModel.likePost(posts[position].UUID, context)
+                    LikedState.LIKED
+                }
         }
 
         notifyDataSetChanged()
@@ -99,6 +92,9 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     }
 
     private fun setPostLiked(post: Post, holder: ViewHolder) {
+        if (viewModel.getLikedStatus(post, context) == LikedState.LIKED) {
+            post.likedState = LikedState.LIKED
+        }
         holder.heartButton.background =
                 if(post.likedState == LikedState.LIKED)
                     context.resources.getDrawable(R.drawable.ic_heart_filled,null)

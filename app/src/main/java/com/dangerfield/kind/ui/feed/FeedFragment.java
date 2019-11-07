@@ -62,6 +62,7 @@ public class FeedFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
+        viewModel.setCurrentUser(CurrentUser.INSTANCE);
 
         setUpRecyclerView();
         setupRefresher();

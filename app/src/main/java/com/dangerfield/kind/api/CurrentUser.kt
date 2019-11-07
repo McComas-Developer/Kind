@@ -4,9 +4,9 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dangerfield.kind.model.Post
-import com.dangerfield.kind.model.Post_api
-import com.dangerfield.kind.model.User
+import androidx.room.Room
+import com.dangerfield.kind.db.LikeIDDatabase
+import com.dangerfield.kind.model.*
 import com.dangerfield.kind.util.Action
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -24,7 +24,43 @@ object CurrentUser : UserRepository {
     val uid: String? get() {return auth.currentUser?.uid}
     val isAuthenticated: Boolean get() { return auth.currentUser != null }
 
-    override fun getLikedPosts() {
+    override fun getLikedPosts(context: Context): List<String> {
+        val db = Room
+                .inMemoryDatabaseBuilder(context, LikeIDDatabase::class.java)
+                .allowMainThreadQueries()
+                .build()
+        val likeIDTable = db.articleDao()
+        return likeIDTable.getAll()
+    }
+
+    override fun likePost(withUUID: String, context: Context){
+        val db = Room
+                .inMemoryDatabaseBuilder(context, LikeIDDatabase::class.java)
+                .allowMainThreadQueries()
+                .build()
+        val likeIDTable = db.articleDao()
+        likeIDTable.insert(LikeID(withUUID))
+    }
+
+    override fun unlikePost(withUUID: String, context: Context){
+        val db = Room
+                .inMemoryDatabaseBuilder(context, LikeIDDatabase::class.java)
+                .allowMainThreadQueries()
+                .build()
+        val likeIDTable = db.articleDao()
+        likeIDTable.delete(LikeID(withUUID))
+    }
+
+    override fun getLikedStatus(ofPost: Post, context: Context): LikedState {
+        val db = Room
+                .inMemoryDatabaseBuilder(context, LikeIDDatabase::class.java)
+                .allowMainThreadQueries()
+                .build()
+        val likeIDTable = db.articleDao()
+        return when (likeIDTable.getAll().contains(ofPost.UUID)) {
+            true -> LikedState.LIKED
+            false -> LikedState.UNLIKED
+        }
     }
 
     override fun getRecentSearches() {
