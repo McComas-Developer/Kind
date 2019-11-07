@@ -2,6 +2,7 @@ package com.dangerfield.kind.api
 
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.ui.find.PopularCategory
 
 interface KindRepository {
 
@@ -10,4 +11,6 @@ interface KindRepository {
     fun getPostsWithTag(tag: String, refreshing: Boolean = false) : MutableLiveData<Resource<List<Post>>>
 
     fun searchPosts(term: String)
+
+    fun getPopularCategories() : MutableLiveData<Resource<List<PopularCategory>>>
 }

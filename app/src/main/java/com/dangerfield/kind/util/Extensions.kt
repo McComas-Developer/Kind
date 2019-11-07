@@ -1,6 +1,7 @@
 package com.dangerfield.kind.util
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.text.Editable
 import android.text.InputFilter
@@ -15,6 +16,10 @@ import java.lang.Math.abs
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import android.content.Context.INPUT_METHOD_SERVICE
+import androidx.core.content.ContextCompat.getSystemService
+
+
 
 typealias Action = () -> Unit
 
@@ -95,4 +100,11 @@ fun String.toReadableDate(): String {
         e.printStackTrace()
     }
     return date.toString().dropLast(18)
+}
+
+fun EditText.openKeyboard() {
+    this.requestFocus()
+    val imm = this.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+
 }

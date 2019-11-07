@@ -2,6 +2,7 @@ package com.dangerfield.kind.util
 
 import com.dangerfield.kind.api.Endpoints
 import com.dangerfield.kind.model.Post_api
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,7 +36,7 @@ class FakeDataCreator(val db: FirebaseFirestore) {
                 "Welcome To Kind, this is some more test data, I know how much you said you liked it",
                 "Dear diary, I met a squirrel today. I told him my name was Jack. That lie will haunt me forever",
                 "This is an example of a longer post that takes up more space to show that we can use to more or less button Correctly"
-        + "This post needs to be longer so ima just keep on typing until I am unsure of what else to add. I think im there. Bye",
+        + "This post needs to be longer so ima just keep on typing until I am unsure of what else to add. I think im there. Bye, But just for good measure ill keep typing a bit more that I was gonna just a second ago. Okay for real now. Bye. XOXO - GOSSIP GIRL",
                 "Hi everyone!"
                 )
 
@@ -67,6 +68,7 @@ class FakeDataCreator(val db: FirebaseFirestore) {
         }
 
         posts.forEach {
+            db.collection(Endpoints.USERS).document(it.posterUUID).update("posts", FieldValue.arrayUnion(it.UUID))
             db.collection(Endpoints.POPULAR_POSTS).document(it.UUID).set(it)
         }
     }

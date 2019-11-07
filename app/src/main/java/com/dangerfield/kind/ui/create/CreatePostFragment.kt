@@ -17,9 +17,8 @@ import com.bumptech.glide.Glide
 import com.dangerfield.kind.R
 import com.dangerfield.kind.api.CurrentUser
 import com.dangerfield.kind.api.Resource
-import com.dangerfield.kind.util.addCharacterMax
-import com.dangerfield.kind.util.hideKeyBoardOnPressAway
-import com.dangerfield.kind.util.showIFF
+import com.dangerfield.kind.util.*
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_create_post.*
 
 class CreatePostFragment : Fragment() {
@@ -42,7 +41,7 @@ class CreatePostFragment : Fragment() {
 
         btn_cancel.setOnClickListener { navigateBack() }
 
-        btn_post.setOnClickListener { post() }
+        btn_post.setOnClickListener { post()}
 
         tv_post_text.hideKeyBoardOnPressAway()
     }
@@ -59,6 +58,11 @@ class CreatePostFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tv_post_text.openKeyboard()
     }
 
     private fun navigateBack() = NavHostFragment.findNavController(this).popBackStack()

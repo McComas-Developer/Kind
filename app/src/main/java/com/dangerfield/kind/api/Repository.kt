@@ -1,18 +1,23 @@
 package com.dangerfield.kind.api
 
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import com.dangerfield.kind.api.Resource.*
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.ExpandedState
 import com.dangerfield.kind.model.Post
 import com.dangerfield.kind.model.User
+import com.dangerfield.kind.ui.find.PopularCategory
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class Repository(private val db: FirebaseFirestore) : KindRepository {
-
     private val tagPosts = MutableLiveData<Resource<List<Post>>>()
     private val feedPosts = MutableLiveData<Resource<List<Post>>>()
 
@@ -47,6 +52,24 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
                 }
 
         return feedPosts
+    }
+
+    override fun getPopularCategories(): MutableLiveData<Resource<List<PopularCategory>>> {
+        Log.d("Elijah", "Starting function")
+        val result = MutableLiveData<Resource<List<PopularCategory>>>()
+            //launches async code
+            CoroutineScope(Dispatchers.IO).launch {
+                Log.d("Elijah", "Inside Coroutine")
+                result.postValue( Success(
+                        listOf(PopularCategory("Dogs"),PopularCategory("Cats"),
+                                PopularCategory("Dogs"),PopularCategory("Cats"),
+                                PopularCategory("Dogs"),PopularCategory("Cats"),
+                                PopularCategory("Dogs"),PopularCategory("Cats"))
+                ))
+            }
+
+        Log.d("Elijah", "Returning from function")
+        return result
     }
 
     override fun searchPosts(term: String) {
