@@ -1,11 +1,15 @@
 package com.dangerfield.kind.ui.find.search
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.dangerfield.kind.api.CurrentUser
 import com.dangerfield.kind.api.KindRepository
 import com.dangerfield.kind.api.Repository
+import com.dangerfield.kind.model.LikedState
+import com.dangerfield.kind.model.Post
 import com.dangerfield.kind.ui.feed.PostViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -24,6 +28,25 @@ class SearchViewModel : ViewModel(), PostViewModel {
         repository.getProfilePicture(FirebaseStorage.getInstance(), uid) {
             onComplete.invoke(it)
         }
+    }
+
+    override fun likePost(withUUID: String) {
+        if (CurrentUser.isAuthenticated) {
+            CurrentUser.likePost(repository, withUUID)
+        }
+    }
+
+    override fun unlikePost(withUUID: String) {
+        if (CurrentUser.isAuthenticated) {
+            CurrentUser.unlikePost(repository, withUUID)
+        }
+    }
+
+    override fun getLikedStatus(ofPost: Post): LikedState {
+        if (CurrentUser.isAuthenticated) {
+            return CurrentUser.getLikedStatus(ofPost)
+        }
+        return LikedState.UNLIKED
     }
 
 }

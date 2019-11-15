@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.room.Room;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import com.dangerfield.kind.util.ExtensionsKt;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FeedFragment extends Fragment {
 
@@ -62,7 +65,10 @@ public class FeedFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
-        viewModel.setCurrentUser(CurrentUser.INSTANCE);
+//        CurrentUser.INSTANCE.buildDatabase(getContext());
+        Log.d("tag","---------------------------------");
+        Log.d("tag",CurrentUser.INSTANCE.getLikedPosts().toString());
+
 
         setUpRecyclerView();
         setupRefresher();

@@ -57,11 +57,11 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     private fun toggleHeart(position: Int) {
         posts[position].likedState = when(posts[position].likedState) {
                 LikedState.LIKED -> {
-                    viewModel.unlikePost(posts[position].UUID, context)
+                    viewModel.unlikePost(posts[position].UUID)
                     LikedState.UNLIKED
                 }
                 LikedState.UNLIKED -> {
-                    viewModel.likePost(posts[position].UUID, context)
+                    viewModel.likePost(posts[position].UUID)
                     LikedState.LIKED
                 }
         }
@@ -92,9 +92,7 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     }
 
     private fun setPostLiked(post: Post, holder: ViewHolder) {
-        if (viewModel.getLikedStatus(post, context) == LikedState.LIKED) {
-            post.likedState = LikedState.LIKED
-        }
+        post.likedState = viewModel.getLikedStatus(post)
         holder.heartButton.background =
                 if(post.likedState == LikedState.LIKED)
                     context.resources.getDrawable(R.drawable.ic_heart_filled,null)

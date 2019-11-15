@@ -6,9 +6,11 @@ import android.view.View
 import com.dangerfield.kind.api.Resource.*
 import androidx.lifecycle.MutableLiveData
 import com.dangerfield.kind.model.ExpandedState
+import com.dangerfield.kind.model.LikedState
 import com.dangerfield.kind.model.Post
 import com.dangerfield.kind.model.User
 import com.dangerfield.kind.ui.find.PopularCategory
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
@@ -21,7 +23,6 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
     private val tagPosts = MutableLiveData<Resource<List<Post>>>()
     private val feedPosts = MutableLiveData<Resource<List<Post>>>()
 
-
     override fun getPostsWithTag(tag: String, refreshing : Boolean):  MutableLiveData<Resource<List<Post>>> {
 
         tagPosts.value = if (refreshing) Loading(refreshing = true) else Loading()
@@ -29,7 +30,7 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
         db.collection(Endpoints.POPULAR_POSTS).whereArrayContains("tags",tag)
                 .get().addOnCompleteListener {data ->
                     val list = data.result?.toObjects(Post::class.java) as List<Post>
-                    list?.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
+                    list.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
                     tagPosts.value = Success(list)
                 }.addOnFailureListener {
                     tagPosts.value = Error(message =it.localizedMessage ?: "Unknown Error")
@@ -45,7 +46,10 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
                 .get()
                 .addOnCompleteListener {data ->
                     val list = data.result?.toObjects(Post::class.java) as List<Post>
-                    list?.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
+                    list.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
+                    if (CurrentUser.isAuthenticated) {
+                        list.map { it.likedState = CurrentUser.getLikedStatus(it) }
+                    }
                     feedPosts.value = Success(list)
                 }.addOnFailureListener {
                     feedPosts.value = Error(message =it.localizedMessage ?: "Unknown Error")
@@ -82,5 +86,17 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
         store.getReference("/user_profile_test/" + uid).downloadUrl.addOnSuccessListener {
             onComplete.invoke(it)
         }
+    }
+
+    override fun addLike(userID: String, withUUID: String) {
+        db.collection(Endpoints.POPULAR_POSTS)
+                .document(withUUID)
+                .update("hearts", FieldValue.arrayUnion(userID))
+    }
+
+    override fun removeLike(userID: String, withUUID: String) {
+        db.collection(Endpoints.POPULAR_POSTS)
+                .document(withUUID)
+                .update("hearts", FieldValue.arrayRemove(userID))
     }
 }

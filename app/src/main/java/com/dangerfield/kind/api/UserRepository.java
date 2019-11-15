@@ -22,13 +22,15 @@ import kotlin.Unit;
 
 public interface UserRepository {
 
-    List<String> getLikedPosts(Context context);
+    List<String> getLikedPosts();
 
-    void likePost(String withUUID, Context context);
+    void likePost(Repository repository, String withUUID);
 
-    void unlikePost(String withUUID, Context context);
+    void unlikePost(Repository repository, String withUUID);
 
-    LikedState getLikedStatus(Post ofPost, Context context);
+    LikedState getLikedStatus(Post ofPost);
+
+    void buildDatabase(Context context);
 
     void getRecentSearches();
 

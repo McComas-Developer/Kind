@@ -2,8 +2,10 @@ package com.dangerfield.kind.api
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.room.Database
 import androidx.room.Room
 import com.dangerfield.kind.db.LikeIDDatabase
 import com.dangerfield.kind.model.*
@@ -23,44 +25,34 @@ object CurrentUser : UserRepository {
     private var authStatus = MutableLiveData<Resource<Boolean>>()
     val uid: String? get() {return auth.currentUser?.uid}
     val isAuthenticated: Boolean get() { return auth.currentUser != null }
+    private var db: LikeIDDatabase? = null
 
-    override fun getLikedPosts(context: Context): List<String> {
-        val db = Room
-                .inMemoryDatabaseBuilder(context, LikeIDDatabase::class.java)
-                .allowMainThreadQueries()
-                .build()
-        val likeIDTable = db.articleDao()
-        return likeIDTable.getAll()
+    override fun getLikedPosts(): List<String> {
+        return db?.articleDao()?.getAll() ?: listOf()
     }
 
-    override fun likePost(withUUID: String, context: Context){
-        val db = Room
-                .inMemoryDatabaseBuilder(context, LikeIDDatabase::class.java)
-                .allowMainThreadQueries()
-                .build()
-        val likeIDTable = db.articleDao()
-        likeIDTable.insert(LikeID(withUUID))
+    override fun likePost(repository: Repository, withUUID: String){
+        db?.articleDao()?.insert(LikeID(withUUID))
+        repository.addLike(uid ?: "", withUUID)
     }
 
-    override fun unlikePost(withUUID: String, context: Context){
-        val db = Room
-                .inMemoryDatabaseBuilder(context, LikeIDDatabase::class.java)
-                .allowMainThreadQueries()
-                .build()
-        val likeIDTable = db.articleDao()
-        likeIDTable.delete(LikeID(withUUID))
+    override fun unlikePost(repository: Repository, withUUID: String){
+        db?.articleDao()?.delete(LikeID(withUUID))
+        repository.removeLike(uid ?: "", withUUID)
     }
 
-    override fun getLikedStatus(ofPost: Post, context: Context): LikedState {
-        val db = Room
-                .inMemoryDatabaseBuilder(context, LikeIDDatabase::class.java)
-                .allowMainThreadQueries()
-                .build()
-        val likeIDTable = db.articleDao()
-        return when (likeIDTable.getAll().contains(ofPost.UUID)) {
+    override fun getLikedStatus(ofPost: Post): LikedState {
+        return when (db?.articleDao()?.getAll()?.contains(ofPost.UUID) ?: false) {
             true -> LikedState.LIKED
             false -> LikedState.UNLIKED
         }
+    }
+
+    override fun buildDatabase(context: Context) {
+        db = Room
+            .databaseBuilder(context, LikeIDDatabase::class.java, "likeID.db")
+            .allowMainThreadQueries()
+            .build()
     }
 
     override fun getRecentSearches() {

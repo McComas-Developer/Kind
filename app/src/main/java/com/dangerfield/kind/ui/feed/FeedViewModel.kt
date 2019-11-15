@@ -16,7 +16,6 @@ import com.google.firebase.storage.FirebaseStorage
 
 class FeedViewModel : ViewModel(), PostViewModel {
     private var repository: Repository = Repository(FirebaseFirestore.getInstance())
-    private var currentUser: CurrentUser? = null
     private var tagPosts = MutableLiveData<Resource<List<Post>>>()
 
     fun getFeed(): LiveData<Resource<List<Post>>> {
@@ -34,33 +33,23 @@ class FeedViewModel : ViewModel(), PostViewModel {
         }
     }
 
-    override fun likePost(withUUID: String, context: Context) {
-        if (currentUser != null) {
-            if (currentUser!!.isAuthenticated) {
-                currentUser!!.likePost(withUUID, context)
-            }
+    override fun likePost(withUUID: String) {
+        if (CurrentUser.isAuthenticated) {
+            CurrentUser.likePost(repository, withUUID)
         }
     }
 
-    override fun unlikePost(withUUID: String, context: Context) {
-        if (currentUser != null) {
-            if (currentUser!!.isAuthenticated) {
-                currentUser!!.unlikePost(withUUID, context)
-            }
+    override fun unlikePost(withUUID: String) {
+        if (CurrentUser.isAuthenticated) {
+            CurrentUser.unlikePost(repository, withUUID)
         }
     }
 
-    override fun getLikedStatus(ofPost: Post, context: Context): LikedState {
-        if (currentUser != null) {
-            if (currentUser!!.isAuthenticated) {
-                return currentUser!!.getLikedStatus(ofPost, context)
-            }
+    override fun getLikedStatus(ofPost: Post): LikedState {
+        if (CurrentUser.isAuthenticated) {
+            return CurrentUser.getLikedStatus(ofPost)
         }
         return LikedState.UNLIKED
-    }
-
-    fun setCurrentUser(withCurrentUser: CurrentUser) {
-        currentUser = withCurrentUser
     }
 
 }
