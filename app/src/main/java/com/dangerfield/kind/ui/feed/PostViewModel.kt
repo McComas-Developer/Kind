@@ -1,8 +1,6 @@
 package com.dangerfield.kind.ui.feed
 
-import android.content.Context
 import android.net.Uri
-import com.dangerfield.kind.api.Repository
 import com.dangerfield.kind.model.LikedState
 import com.dangerfield.kind.model.Post
 

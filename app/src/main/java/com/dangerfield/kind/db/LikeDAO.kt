@@ -2,6 +2,7 @@ package com.dangerfield.kind.db
 
 import androidx.room.*
 import com.dangerfield.kind.model.LikeID
+import java.util.*
 
 @Dao
 interface LikeDAO {
@@ -11,6 +12,13 @@ interface LikeDAO {
      */
     @Query("SELECT * from likeIDTable")
     fun getAll(): List<String>
+
+
+    /**
+     * queries for a specific like
+     */
+    @Query("SELECT * from likeIDTable WHERE id = :withUUID")
+    fun queryPost(withUUID: UUID): List<String>
 
     /**
      *
