@@ -2,11 +2,14 @@ package com.dangerfield.kind.api
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dangerfield.kind.model.Post
-import com.dangerfield.kind.model.Post_api
-import com.dangerfield.kind.model.User
+import androidx.room.Database
+import androidx.room.Room
+import com.dangerfield.kind.db.LikeIDDatabase
+import com.dangerfield.kind.model.*
+import com.dangerfield.kind.ui.find.PopularCategory
 import com.dangerfield.kind.util.Action
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -15,6 +18,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.function.Function
 
 object CurrentUser : UserRepository {
@@ -23,8 +29,34 @@ object CurrentUser : UserRepository {
     private var authStatus = MutableLiveData<Resource<Boolean>>()
     val uid: String? get() {return auth.currentUser?.uid}
     val isAuthenticated: Boolean get() { return auth.currentUser != null }
+    private var db: LikeIDDatabase? = null
 
-    override fun getLikedPosts() {
+    override fun likePost(fireStore: FirebaseFirestore, withUUID: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            db?.articleDao()?.insert(LikeID(withUUID))
+            addLike(fireStore, uid ?: "", withUUID)
+        }
+    }
+
+    override fun unlikePost(fireStore: FirebaseFirestore, withUUID: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            db?.articleDao()?.delete(LikeID(withUUID))
+            removeLike(fireStore, uid ?: "", withUUID)
+        }
+    }
+
+    override fun setLikeState(ofPost: Post) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val state =  when (db?.articleDao()?.queryPost(ofPost.UUID).isNullOrEmpty()) {
+                true -> LikedState.UNLIKED
+                false -> LikedState.LIKED
+            }
+            ofPost.likedState = state
+        }
+    }
+
+    override fun buildDatabase(context: Context) {
+        db = LikeIDDatabase(context)
     }
 
     override fun getRecentSearches() {
@@ -144,5 +176,18 @@ object CurrentUser : UserRepository {
         }.addOnFailureListener {
             postRequest.value = Resource.Error(message = it.localizedMessage ?: "Unknown Error")
         }
+    }
+
+
+    fun addLike(db: FirebaseFirestore, userID: String, withUUID: String) {
+        db.collection(Endpoints.POPULAR_POSTS)
+                .document(withUUID)
+                .update("hearts", FieldValue.arrayUnion(userID))
+    }
+
+    fun removeLike(db: FirebaseFirestore, userID: String, withUUID: String) {
+        db.collection(Endpoints.POPULAR_POSTS)
+                .document(withUUID)
+                .update("hearts", FieldValue.arrayRemove(userID))
     }
 }
