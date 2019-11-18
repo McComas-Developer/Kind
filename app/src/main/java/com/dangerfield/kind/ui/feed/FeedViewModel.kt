@@ -35,13 +35,13 @@ class FeedViewModel : ViewModel(), PostViewModel {
 
     override fun likePost(withUUID: String) {
         if (CurrentUser.isAuthenticated) {
-            CurrentUser.likePost(repository, withUUID)
+            CurrentUser.likePost(FirebaseFirestore.getInstance(), withUUID)
         }
     }
 
     override fun unlikePost(withUUID: String) {
         if (CurrentUser.isAuthenticated) {
-            CurrentUser.unlikePost(repository, withUUID)
+            CurrentUser.unlikePost(FirebaseFirestore.getInstance(), withUUID)
         }
     }
 

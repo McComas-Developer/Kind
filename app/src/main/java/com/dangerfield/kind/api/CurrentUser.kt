@@ -31,14 +31,14 @@ object CurrentUser : UserRepository {
         return db?.articleDao()?.getAll() ?: listOf()
     }
 
-    override fun likePost(repository: Repository, withUUID: String){
+    override fun likePost(fireStore: FirebaseFirestore, withUUID: String){
         db?.articleDao()?.insert(LikeID(withUUID))
-        repository.addLike(uid ?: "", withUUID)
+        addLike(fireStore,uid ?: "", withUUID)
     }
 
-    override fun unlikePost(repository: Repository, withUUID: String){
+    override fun unlikePost(fireStore: FirebaseFirestore, withUUID: String){
         db?.articleDao()?.delete(LikeID(withUUID))
-        repository.removeLike(uid ?: "", withUUID)
+        removeLike(fireStore,uid ?: "", withUUID)
     }
 
     override fun getLikedStatus(ofPost: Post): LikedState {
@@ -172,5 +172,18 @@ object CurrentUser : UserRepository {
         }.addOnFailureListener {
             postRequest.value = Resource.Error(message = it.localizedMessage ?: "Unknown Error")
         }
+    }
+
+
+    fun addLike(db: FirebaseFirestore, userID: String, withUUID: String) {
+        db.collection(Endpoints.POPULAR_POSTS)
+                .document(withUUID)
+                .update("hearts", FieldValue.arrayUnion(userID))
+    }
+
+    fun removeLike(db: FirebaseFirestore, userID: String, withUUID: String) {
+        db.collection(Endpoints.POPULAR_POSTS)
+                .document(withUUID)
+                .update("hearts", FieldValue.arrayRemove(userID))
     }
 }

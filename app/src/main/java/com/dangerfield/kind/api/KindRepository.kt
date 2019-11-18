@@ -13,8 +13,4 @@ interface KindRepository {
     fun searchPosts(term: String)
 
     fun getPopularCategories() : MutableLiveData<Resource<List<PopularCategory>>>
-
-    fun addLike(userID: String, withUUID: String)
-
-    fun removeLike(userID: String, withUUID: String)
 }

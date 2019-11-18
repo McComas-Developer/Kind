@@ -24,9 +24,9 @@ public interface UserRepository {
 
     List<String> getLikedPosts();
 
-    void likePost(Repository repository, String withUUID);
+    void likePost(FirebaseFirestore db, String withUUID);
 
-    void unlikePost(Repository repository, String withUUID);
+    void unlikePost(FirebaseFirestore db, String withUUID);
 
     LikedState getLikedStatus(Post ofPost);
 

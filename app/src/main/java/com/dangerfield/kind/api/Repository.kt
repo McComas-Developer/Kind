@@ -87,16 +87,4 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
             onComplete.invoke(it)
         }
     }
-
-    override fun addLike(userID: String, withUUID: String) {
-        db.collection(Endpoints.POPULAR_POSTS)
-                .document(withUUID)
-                .update("hearts", FieldValue.arrayUnion(userID))
-    }
-
-    override fun removeLike(userID: String, withUUID: String) {
-        db.collection(Endpoints.POPULAR_POSTS)
-                .document(withUUID)
-                .update("hearts", FieldValue.arrayRemove(userID))
-    }
 }
