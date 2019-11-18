@@ -18,7 +18,7 @@ interface LikeDAO {
      * queries for a specific like
      */
     @Query("SELECT * from likeIDTable WHERE id = :withUUID")
-    fun queryPost(withUUID: UUID): List<String>
+    fun queryPost(withUUID: String): List<String>
 
     /**
      *

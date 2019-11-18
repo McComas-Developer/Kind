@@ -42,9 +42,9 @@ object CurrentUser : UserRepository {
     }
 
     override fun getLikedStatus(ofPost: Post): LikedState {
-        return when (db?.articleDao()?.getAll()?.contains(ofPost.UUID) ?: false) {
-            true -> LikedState.LIKED
-            false -> LikedState.UNLIKED
+        return when (db?.articleDao()?.queryPost(ofPost.UUID).isNullOrEmpty()) {
+            true -> LikedState.UNLIKED
+            false -> LikedState.LIKED
         }
     }
 
