@@ -95,7 +95,6 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     }
 
     private fun setPostLiked(post: Post, holder: ViewHolder) {
-        post.likedState = viewModel.getLikedStatus(post)
         holder.heartButton.background =
                 if(post.likedState == LikedState.LIKED)
                     context.resources.getDrawable(R.drawable.ic_heart_filled,null)
