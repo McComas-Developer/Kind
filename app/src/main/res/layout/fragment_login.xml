@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_up_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".ui.profile.onboard.SignUpFragment"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/tv_log_in"
+        style="@style/AppTheme.HeaderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_in"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/tv_email"
+        style="@style/AppTheme.EditText"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_log_in" />
+
+    <EditText
+        android:id="@+id/tv_password"
+        style="@style/AppTheme.EditText"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_email" />
+
+
+    <ProgressBar
+        android:id="@+id/pb_auth_login"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:theme="@style/WhiteProgressStyle"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_submit_log_in"
+        app:layout_constraintEnd_toEndOf="@+id/btn_submit_log_in"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/btn_submit_log_in"
+        app:layout_constraintTop_toTopOf="@+id/btn_submit_log_in" />
+
+    <Button
+        android:id="@+id/btn_submit_log_in"
+        style="@style/AppTheme.button.dark"
+        android:layout_marginTop="32dp"
+        android:text="@string/log_in"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_password" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

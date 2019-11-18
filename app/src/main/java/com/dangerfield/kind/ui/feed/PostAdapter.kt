@@ -9,14 +9,20 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.dangerfield.kind.R
+import com.dangerfield.kind.api.CurrentUser
+import com.dangerfield.kind.db.LikeIDDatabase
 import com.dangerfield.kind.model.ExpandedState
+import com.dangerfield.kind.model.LikeID
 import com.dangerfield.kind.model.LikedState
 import com.dangerfield.kind.model.Post
+import com.dangerfield.kind.util.toReadableDate
 import kotlinx.android.synthetic.main.item_feed_post.view.*
+import java.security.AccessController.getContext
 
-class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
+class PostAdapter(context: Context, private val viewModel: PostViewModel) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
     var posts = listOf<Post>()
         set(value) {
@@ -37,26 +43,38 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
         val posterImage: ImageView = view.iv_post_profile_pic
         val moreButton: TextView = view.tv_more
         val heartButton: ImageButton = view.btn_heart
+        val timeStamp : TextView = view.tv_post_date
+        val username : TextView = view.tv_post_username
+        val heartsCount : TextView = view.tv_hearts_count
 
         init {
-            heartButton.setOnClickListener {
-                toggleHeart( adapterPosition)
+            heartButton.setOnClickListener { toggleHeart(adapterPosition) }
+            moreButton.setOnClickListener {
+                toggleText(adapterPosition)
             }
         }
     }
 
     private fun toggleHeart(position: Int) {
         posts[position].likedState = when(posts[position].likedState) {
-                LikedState.LIKED -> LikedState.UNLIKED
-                LikedState.UNLIKED -> LikedState.LIKED
-            }
+                LikedState.LIKED -> {
+                   (posts[position].hearts as ArrayList<String>).remove(CurrentUser.uid)
+                    viewModel.unlikePost(posts[position].UUID)
+                    LikedState.UNLIKED
+                }
+                LikedState.UNLIKED -> {
+                    (posts[position].hearts as ArrayList<String>).add(CurrentUser.uid ?: return)
+                    viewModel.likePost(posts[position].UUID)
+                    LikedState.LIKED
+                }
+        }
 
         notifyDataSetChanged()
     }
 
-    private fun toggleText(it: Post) {
-        it.expandedState =
-                if(it.expandedState == ExpandedState.EXPANDED) ExpandedState.COLLAPSED
+    private fun toggleText(position: Int) {
+        posts[position].expandedState =
+                if(posts[position].expandedState == ExpandedState.EXPANDED) ExpandedState.COLLAPSED
                 else ExpandedState.EXPANDED
 
         notifyDataSetChanged()
@@ -74,10 +92,6 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
         setPostProfilePic(post, holder)
         setPostImage(post, holder)
         setPostLiked(post, holder)
-
-        holder.moreButton.setOnClickListener {
-            toggleText(post)
-        }
     }
 
     private fun setPostLiked(post: Post, holder: ViewHolder) {
@@ -89,11 +103,12 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
     }
 
     private fun setPostProfilePic(post: Post, holder: ViewHolder) {
-        Glide.with(holder.posterImage.context)
-                .load("https://firebasestorage.googleapis.com/v0/b/kind-af233.appspot.com/o/user_profiles_test%2F636050436856130987-GTY-580014564-83556690.jpeg?alt=media&token=26a644f6-42dc-449e-8bc7-a660fe055383")
-                .placeholder(R.color.colorPrimary)
-                .centerCrop()
-                .into(holder.posterImage)
+        viewModel.getPosterProfilePic(post.posterUUID) {
+            Glide.with(holder.posterImage)
+                    .load(it)
+                    .centerCrop()
+                    .into(holder.posterImage)
+        }
     }
 
     private fun setPostImage(post: Post, holder: ViewHolder) {
@@ -110,16 +125,18 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
     }
 
     private fun setPostText(post: Post, holder: ViewHolder) {
+        holder.heartsCount.text = getCountText(post.hearts.size)
+        holder.timeStamp.text = post.timeStamp.toReadableDate()
+        holder.username.text = post.posterUserName
         holder.title.text = when (post.expandedState) {
             ExpandedState.COLLAPSED -> {
-                Log.d("expanded", "GOT HERE")
                 holder.moreButton.visibility = View.VISIBLE
                 holder.moreButton.text = "more"
                 post.text.substring(0, 150) + "..."
             }
             ExpandedState.EXPANDED -> {
                 holder.moreButton.visibility = View.VISIBLE
-                holder.moreButton.text = "less"
+                holder.moreButton.text = context.getString(R.string.less)
                 post.text
             }
             else -> {
@@ -129,6 +146,13 @@ class FeedAdapter(context: Context, posts: List<Post>) : RecyclerView.Adapter<Fe
         }
     }
 
-    override fun getItemCount() = this.posts.size
+    private fun getCountText(size: Int): String {
+        return if(size > 0) {
+            "$size hearts"
+        } else{
+            context.getString(R.string.first_like)
+        }
+    }
 
+    override fun getItemCount() = this.posts.size
 }

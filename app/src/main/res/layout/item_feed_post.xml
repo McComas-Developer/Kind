@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageButton
             android:id="@+id/btn_heart"
             android:layout_width="30dp"
@@ -22,7 +23,7 @@
             android:background="@drawable/ic_heart"
             android:elevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_today_i"
+            app:layout_constraintStart_toStartOf="@+id/tv_post_text"
             app:layout_constraintTop_toBottomOf="@+id/tv_post_text" />
 
         <Button
@@ -32,7 +33,7 @@
             android:background="@null"
             android:foregroundGravity="center"
             android:gravity="center"
-            android:text="more"
+            android:text="@string/more"
             android:textAllCaps="false"
             android:textColor="#536DFE"
             android:visibility="invisible"
@@ -50,20 +51,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tv_today_i"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="Today I,"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_post" />
-
-        <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tv_hearts_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -73,7 +61,7 @@
             app:layout_constraintTop_toTopOf="@+id/btn_heart" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tv_post_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -87,15 +75,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="42dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="42dp"
             android:ellipsize="none"
             android:foregroundGravity="left"
             android:gravity="left"
-            android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_today_i" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_post_date" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -113,6 +100,15 @@
                 android:layout_height="45dp" />
 
         </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_post_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_post" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
