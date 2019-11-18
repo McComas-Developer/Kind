@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
-import androidx.room.Room;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,22 +17,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.dangerfield.kind.R;
-import com.dangerfield.kind.db.LikeDAO;
 import com.dangerfield.kind.db.LikeIDDatabase;
-import com.dangerfield.kind.model.LikeID;
 import com.dangerfield.kind.model.Post;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-
-import java.util.ArrayList;
 import com.dangerfield.kind.api.CurrentUser;
 import com.dangerfield.kind.api.Resource;
-import com.dangerfield.kind.model.Post;
-import com.dangerfield.kind.util.AlertFactory;
 import com.dangerfield.kind.util.ExtensionsKt;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-
 import java.util.List;
-import java.util.Objects;
 
 public class FeedFragment extends Fragment {
 
@@ -65,10 +53,6 @@ public class FeedFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         viewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
-//        CurrentUser.INSTANCE.buildDatabase(getContext());
-        Log.d("tag","---------------------------------");
-        Log.d("tag",CurrentUser.INSTANCE.getLikedPosts().toString());
-
 
         setUpRecyclerView();
         setupRefresher();

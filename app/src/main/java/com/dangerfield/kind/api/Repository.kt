@@ -48,7 +48,7 @@ class Repository(private val db: FirebaseFirestore) : KindRepository {
                     val list = data.result?.toObjects(Post::class.java) as List<Post>
                     list.map { if(it.text.length > 150) it.expandedState = ExpandedState.COLLAPSED }
                     if (CurrentUser.isAuthenticated) {
-                        list.map { it.likedState = CurrentUser.getLikedStatus(it) }
+                        list.map { CurrentUser.setLikeState(it) }
                     }
                     feedPosts.value = Success(list)
                 }.addOnFailureListener {

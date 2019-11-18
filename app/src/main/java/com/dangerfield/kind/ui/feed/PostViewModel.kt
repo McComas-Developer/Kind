@@ -11,6 +11,4 @@ interface PostViewModel {
     fun likePost(withUUID: String)
 
     fun unlikePost(withUUID: String)
-
-    fun getLikedStatus (ofPost: Post): LikedState
 }

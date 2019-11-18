@@ -9,6 +9,7 @@ import androidx.room.Database
 import androidx.room.Room
 import com.dangerfield.kind.db.LikeIDDatabase
 import com.dangerfield.kind.model.*
+import com.dangerfield.kind.ui.find.PopularCategory
 import com.dangerfield.kind.util.Action
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -17,6 +18,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.function.Function
 
 object CurrentUser : UserRepository {
@@ -27,32 +31,32 @@ object CurrentUser : UserRepository {
     val isAuthenticated: Boolean get() { return auth.currentUser != null }
     private var db: LikeIDDatabase? = null
 
-    override fun getLikedPosts(): List<String> {
-        return db?.articleDao()?.getAll() ?: listOf()
-    }
-
     override fun likePost(fireStore: FirebaseFirestore, withUUID: String){
-        db?.articleDao()?.insert(LikeID(withUUID))
-        addLike(fireStore,uid ?: "", withUUID)
+        CoroutineScope(Dispatchers.IO).launch {
+            db?.articleDao()?.insert(LikeID(withUUID))
+            addLike(fireStore, uid ?: "", withUUID)
+        }
     }
 
     override fun unlikePost(fireStore: FirebaseFirestore, withUUID: String){
-        db?.articleDao()?.delete(LikeID(withUUID))
-        removeLike(fireStore,uid ?: "", withUUID)
+        CoroutineScope(Dispatchers.IO).launch {
+            db?.articleDao()?.delete(LikeID(withUUID))
+            removeLike(fireStore, uid ?: "", withUUID)
+        }
     }
 
-    override fun getLikedStatus(ofPost: Post): LikedState {
-        return when (db?.articleDao()?.queryPost(ofPost.UUID).isNullOrEmpty()) {
-            true -> LikedState.UNLIKED
-            false -> LikedState.LIKED
+    override fun setLikeState(ofPost: Post) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val state =  when (db?.articleDao()?.queryPost(ofPost.UUID).isNullOrEmpty()) {
+                true -> LikedState.UNLIKED
+                false -> LikedState.LIKED
+            }
+            ofPost.likedState = state
         }
     }
 
     override fun buildDatabase(context: Context) {
-        db = Room
-            .databaseBuilder(context, LikeIDDatabase::class.java, "likeID.db")
-            .allowMainThreadQueries()
-            .build()
+        db = LikeIDDatabase(context)
     }
 
     override fun getRecentSearches() {

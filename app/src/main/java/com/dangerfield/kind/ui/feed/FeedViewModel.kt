@@ -45,11 +45,4 @@ class FeedViewModel : ViewModel(), PostViewModel {
         }
     }
 
-    override fun getLikedStatus(ofPost: Post): LikedState {
-        if (CurrentUser.isAuthenticated) {
-            return CurrentUser.getLikedStatus(ofPost)
-        }
-        return LikedState.UNLIKED
-    }
-
 }

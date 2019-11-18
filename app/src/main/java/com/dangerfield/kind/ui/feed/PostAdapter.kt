@@ -58,7 +58,7 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     private fun toggleHeart(position: Int) {
         posts[position].likedState = when(posts[position].likedState) {
                 LikedState.LIKED -> {
-                    (posts[position].hearts as ArrayList<String>).remove(CurrentUser.uid)
+                   (posts[position].hearts as ArrayList<String>).remove(CurrentUser.uid)
                     viewModel.unlikePost(posts[position].UUID)
                     LikedState.UNLIKED
                 }
@@ -130,14 +130,13 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
         holder.username.text = post.posterUserName
         holder.title.text = when (post.expandedState) {
             ExpandedState.COLLAPSED -> {
-                Log.d("expanded", "GOT HERE")
                 holder.moreButton.visibility = View.VISIBLE
                 holder.moreButton.text = "more"
                 post.text.substring(0, 150) + "..."
             }
             ExpandedState.EXPANDED -> {
                 holder.moreButton.visibility = View.VISIBLE
-                holder.moreButton.text = "less"
+                holder.moreButton.text = context.getString(R.string.less)
                 post.text
             }
             else -> {
@@ -149,9 +148,9 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
 
     private fun getCountText(size: Int): String {
         return if(size > 0) {
-            "${size} hearts"
-        }else{
-            "Be the first to like"
+            "$size hearts"
+        } else{
+            context.getString(R.string.first_like)
         }
     }
 
