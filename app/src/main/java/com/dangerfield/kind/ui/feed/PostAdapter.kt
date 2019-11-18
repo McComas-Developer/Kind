@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.dangerfield.kind.R
+import com.dangerfield.kind.api.CurrentUser
 import com.dangerfield.kind.db.LikeIDDatabase
 import com.dangerfield.kind.model.ExpandedState
 import com.dangerfield.kind.model.LikeID
@@ -57,10 +58,12 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     private fun toggleHeart(position: Int) {
         posts[position].likedState = when(posts[position].likedState) {
                 LikedState.LIKED -> {
+                    (posts[position].hearts as ArrayList<String>).remove(CurrentUser.uid)
                     viewModel.unlikePost(posts[position].UUID)
                     LikedState.UNLIKED
                 }
                 LikedState.UNLIKED -> {
+                    (posts[position].hearts as ArrayList<String>).add(CurrentUser.uid ?: return)
                     viewModel.likePost(posts[position].UUID)
                     LikedState.LIKED
                 }
