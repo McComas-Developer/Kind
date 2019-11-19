@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.bumptech.glide.Glide
@@ -56,6 +58,7 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     }
 
     private fun toggleHeart(position: Int) {
+        if(CurrentUser.isAuthenticated){
         posts[position].likedState = when(posts[position].likedState) {
                 LikedState.LIKED -> {
                    (posts[position].hearts as ArrayList<String>).remove(CurrentUser.uid)
@@ -70,6 +73,9 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
         }
 
         notifyDataSetChanged()
+        }else{
+            Toast.makeText(context, context.getString(R.string.login_toast), Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun toggleText(position: Int) {
@@ -148,7 +154,7 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
 
     private fun getCountText(size: Int): String {
         return if(size > 0) {
-            "$size hearts"
+            if(size == 1) "$size heart" else "$size hearts"
         } else{
             context.getString(R.string.first_like)
         }
