@@ -21,7 +21,7 @@ abstract class LikeIDDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context) = Room.databaseBuilder(context,
-                LikeIDDatabase::class.java, "likeID.db")
+                LikeIDDatabase::class.java, "likeID.db").allowMainThreadQueries()
                 .build()
     }
 }
