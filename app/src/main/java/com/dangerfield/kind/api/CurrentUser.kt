@@ -46,12 +46,9 @@ object CurrentUser : UserRepository {
     }
 
     override fun setLikeState(ofPost: Post) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val state =  when (db?.articleDao()?.queryPost(ofPost.UUID).isNullOrEmpty()) {
-                true -> LikedState.UNLIKED
-                false -> LikedState.LIKED
-            }
-            ofPost.likedState = state
+        ofPost.likedState =  when (db?.articleDao()?.queryPost(ofPost.UUID).isNullOrEmpty()) {
+            true -> LikedState.UNLIKED
+            false -> LikedState.LIKED
         }
     }
 
