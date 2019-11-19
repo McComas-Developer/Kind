@@ -1,24 +1,33 @@
 package com.dangerfield.kind.ui.profile;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
 import com.dangerfield.kind.R;
 import com.dangerfield.kind.api.CurrentUser;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
 
 public class ProfileFragment extends Fragment {
 
     private CurrentUser currentUser;
-    private Button signOutButton;
+    private ImageButton settingsButton;
     private CollapsingToolbarLayout collapsing_toolbar;
 
     @Override
@@ -32,15 +41,16 @@ public class ProfileFragment extends Fragment {
         else{ showOnBoarding(view); }
         collapsing_toolbar = view.findViewById(R.id.profile_collapsing_toolbar);
         return view;
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        collapsing_toolbar.setExpandedTitleTypeface(
+        setActionBarTitle("");
+        /*collapsing_toolbar.setExpandedTitleTypeface(
                 Typeface.create(collapsing_toolbar.getExpandedTitleTypeface(), Typeface.BOLD)
-        );
+        );*/
     }
 
     private void showOnBoarding(View view) {
@@ -64,14 +74,19 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showProfile(View view) {
-        setActionBarTitle(getString(R.string.string_profile_title));
-        signOutButton = view.findViewById(R.id.btn_sign_out);
+        //setActionBarTitle(getString(R.string.string_profile_title));
+        settingsButton = view.findViewById(R.id.profile_settings);
+
+        ViewPager pager = view.findViewById(R.id.viewPager);
+        pager.setAdapter(new ViewPagerAdapter(getFragmentManager()));
+        //Set Up Tab Display //
+        TabLayout tabLayout= view.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(pager);
         view.findViewById(R.id.included_profile_view).setVisibility(View.VISIBLE);
         view.findViewById(R.id.included_authentication_view).setVisibility(View.GONE);
 
-        signOutButton.setOnClickListener(it -> {
-            CurrentUser.INSTANCE.signOut(getContext());
-            reloadFragment();
+        settingsButton.setOnClickListener(view1 -> {
+            NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_settingsFragment);
         });
     }
 

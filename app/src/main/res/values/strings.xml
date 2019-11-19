@@ -3,6 +3,7 @@
     <string name="string_feed_title">Feed</string>
     <string name="string_find_title">Find</string>
     <string name="string_profile_title">Profile</string>
+    <string name="string_settings_title">Settings</string>
 
     <string name="looks_like_you_re_not_logged_in">Looks like you\'re not logged in</string>
     <string name="or">or</string>
