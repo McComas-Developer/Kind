@@ -23,18 +23,12 @@ public class SettingsFragment extends Fragment {
 
         signOutButton.setOnClickListener(it -> {
             CurrentUser.INSTANCE.signOut(getContext());
-            reloadFragment();
+            exitFragment();
         });
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    private void reloadFragment() {
-        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+    private void exitFragment() {
+        getActivity().onBackPressed();
     }
 }

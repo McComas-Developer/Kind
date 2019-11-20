@@ -1,28 +1,22 @@
 package com.dangerfield.kind.ui.profile;
 
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.dangerfield.kind.R;
 import com.dangerfield.kind.api.CurrentUser;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -38,8 +32,10 @@ public class ProfileFragment extends Fragment {
         currentUser = CurrentUser.INSTANCE;
         ((AppCompatActivity) getActivity()).setSupportActionBar(view.findViewById(R.id.profile_toolbar));
         if(currentUser.isAuthenticated()){ showProfile(view); }
-        else{ showOnBoarding(view); }
-        collapsing_toolbar = view.findViewById(R.id.profile_collapsing_toolbar);
+        else{
+            collapsing_toolbar = view.findViewById(R.id.profile_collapsing_toolbar);
+            showOnBoarding(view);
+        }
         return view;
 
     }
@@ -48,9 +44,6 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setActionBarTitle("");
-        /*collapsing_toolbar.setExpandedTitleTypeface(
-                Typeface.create(collapsing_toolbar.getExpandedTitleTypeface(), Typeface.BOLD)
-        );*/
     }
 
     private void showOnBoarding(View view) {
@@ -66,7 +59,12 @@ public class ProfileFragment extends Fragment {
 
         view.findViewById(R.id.included_authentication_view).setVisibility(View.VISIBLE);
         view.findViewById(R.id.included_profile_view).setVisibility(View.GONE);
+        view.findViewById(R.id.profile_settings).setVisibility(View.GONE);
+        view.findViewById(R.id.profile_user).setVisibility(View.GONE);
 
+        AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsing_toolbar.getLayoutParams();
+        p.setScrollFlags(0);
+        collapsing_toolbar.setLayoutParams(p);
     }
 
     private void setActionBarTitle(String s) {
@@ -88,9 +86,5 @@ public class ProfileFragment extends Fragment {
         settingsButton.setOnClickListener(view1 -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_settingsFragment);
         });
-    }
-
-    private void reloadFragment() {
-        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
 }
