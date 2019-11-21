@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.dangerfield.kind.ui.feed.FeedFragment;
 import com.dangerfield.kind.ui.find.FindFragment;
-import com.dangerfield.kind.ui.profile.ProfileFragment;
+import com.dangerfield.kind.ui.profile.authed.ProfileFragment;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
