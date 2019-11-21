@@ -1,7 +1,5 @@
-package com.dangerfield.kind.ui.profile;
+package com.dangerfield.kind.ui.profile.authed;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;

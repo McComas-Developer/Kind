@@ -22,6 +22,6 @@
     <string name="sign_in">Sign in</string>
     <string name="missing_field">Please fill out all fields</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="looks_like_you_have_posted_yet">Looks like you have not posted yet.</string>
+    <string name="looks_like_you_have_not_liked_any_posts_yet">Looks like you have not liked any posts yet.</string>
 </resources>

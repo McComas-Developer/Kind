@@ -1,4 +1,4 @@
-package com.dangerfield.kind.ui.profile;
+package com.dangerfield.kind.ui.profile.authed;
 
 
 import android.os.Bundle;
@@ -72,12 +72,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showProfile(View view) {
-        //setActionBarTitle(getString(R.string.string_profile_title));
         settingsButton = view.findViewById(R.id.profile_settings);
 
         ViewPager pager = view.findViewById(R.id.viewPager);
         pager.setAdapter(new ViewPagerAdapter(getFragmentManager()));
-        //Set Up Tab Display //
         TabLayout tabLayout= view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(pager);
         view.findViewById(R.id.included_profile_view).setVisibility(View.VISIBLE);

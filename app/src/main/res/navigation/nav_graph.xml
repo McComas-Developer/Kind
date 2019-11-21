@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.dangerfield.kind.ui.profile.SettingsFragment"
+        android:name="com.dangerfield.kind.ui.profile.authed.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

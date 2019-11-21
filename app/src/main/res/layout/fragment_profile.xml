@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 app:collapsedTitleGravity="center_vertical"
-                android:background="@android:color/holo_red_light"
+                android:background="@color/colorAccent"
                 app:expandedTitleMargin="32dp"
                 app:expandedTitleMarginBottom="150dp"
                 app:expandedTitleMarginStart="16dp"

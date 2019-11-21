@@ -1,4 +1,4 @@
-package com.dangerfield.kind.ui.profile;
+package com.dangerfield.kind.ui.profile.authed;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
