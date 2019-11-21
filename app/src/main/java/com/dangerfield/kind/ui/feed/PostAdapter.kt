@@ -8,14 +8,21 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.dangerfield.kind.R
+import com.dangerfield.kind.api.CurrentUser
+import com.dangerfield.kind.db.LikeIDDatabase
 import com.dangerfield.kind.model.ExpandedState
+import com.dangerfield.kind.model.LikeID
 import com.dangerfield.kind.model.LikedState
 import com.dangerfield.kind.model.Post
 import com.dangerfield.kind.util.toReadableDate
 import kotlinx.android.synthetic.main.item_feed_post.view.*
+import java.security.AccessController.getContext
 
 class PostAdapter(context: Context, private val viewModel: PostViewModel) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
@@ -51,12 +58,24 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
     }
 
     private fun toggleHeart(position: Int) {
+        if(CurrentUser.isAuthenticated){
         posts[position].likedState = when(posts[position].likedState) {
-                LikedState.LIKED -> {LikedState.UNLIKED}
-                LikedState.UNLIKED -> LikedState.LIKED
-            }
+                LikedState.LIKED -> {
+                   (posts[position].hearts as ArrayList<String>).remove(CurrentUser.uid)
+                    viewModel.unlikePost(posts[position].UUID)
+                    LikedState.UNLIKED
+                }
+                LikedState.UNLIKED -> {
+                    (posts[position].hearts as ArrayList<String>).add(CurrentUser.uid ?: return)
+                    viewModel.likePost(posts[position].UUID)
+                    LikedState.LIKED
+                }
+        }
 
         notifyDataSetChanged()
+        }else{
+            Toast.makeText(context, context.getString(R.string.login_toast), Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun toggleText(position: Int) {
@@ -117,14 +136,13 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
         holder.username.text = post.posterUserName
         holder.title.text = when (post.expandedState) {
             ExpandedState.COLLAPSED -> {
-                Log.d("expanded", "GOT HERE")
                 holder.moreButton.visibility = View.VISIBLE
                 holder.moreButton.text = "more"
                 post.text.substring(0, 150) + "..."
             }
             ExpandedState.EXPANDED -> {
                 holder.moreButton.visibility = View.VISIBLE
-                holder.moreButton.text = "less"
+                holder.moreButton.text = context.getString(R.string.less)
                 post.text
             }
             else -> {
@@ -136,9 +154,9 @@ class PostAdapter(context: Context, private val viewModel: PostViewModel) : Recy
 
     private fun getCountText(size: Int): String {
         return if(size > 0) {
-            "${size} hearts"
-        }else{
-            "Be the first to like"
+            if(size == 1) "$size heart" else "$size hearts"
+        } else{
+            context.getString(R.string.first_like)
         }
     }
 

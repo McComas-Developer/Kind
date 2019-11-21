@@ -6,21 +6,30 @@ import android.net.Uri;
 import androidx.lifecycle.LiveData;
 
 
+import com.dangerfield.kind.model.LikedState;
 import com.dangerfield.kind.model.Post;
 import com.dangerfield.kind.model.Post_api;
+import com.dangerfield.kind.util.ExtensionsKt;
 import com.dangerfield.kind.util.ExtensionsKt.*;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.util.function.Function;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
+import kotlin.Function;
 import kotlin.Unit;
 
 public interface UserRepository {
 
-    void getLikedPosts();
+    void likePost(FirebaseFirestore db, String withUUID);
+
+    void unlikePost(FirebaseFirestore db, String withUUID);
+
+    void setLikeState(Post ofPost);
+
+    void buildDatabase(Context context);
 
     void getRecentSearches();
 

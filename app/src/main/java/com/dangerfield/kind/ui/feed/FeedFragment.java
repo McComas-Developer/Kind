@@ -17,13 +17,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.dangerfield.kind.R;
+import com.dangerfield.kind.db.LikeIDDatabase;
+import com.dangerfield.kind.model.Post;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.dangerfield.kind.api.CurrentUser;
 import com.dangerfield.kind.api.Resource;
-import com.dangerfield.kind.model.Post;
-import com.dangerfield.kind.util.AlertFactory;
 import com.dangerfield.kind.util.ExtensionsKt;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-
 import java.util.List;
 
 public class FeedFragment extends Fragment {
@@ -35,6 +34,7 @@ public class FeedFragment extends Fragment {
     private ProgressBar pb_feed;
     private CollapsingToolbarLayout collapsing_toolbar;
     private SwipeRefreshLayout swipe_refresh_layout;
+    private LikeIDDatabase db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,16 +85,16 @@ public class FeedFragment extends Fragment {
 
     private void setupPostRequest() {
         createPostButton = getActivity().findViewById(R.id.vst_center_image);
-        ViewPager pager =  getActivity().findViewById(R.id.pager);
+        ViewPager pager = getActivity().findViewById(R.id.pager);
 
         createPostButton.setOnClickListener(view -> {
-            if(pager.getCurrentItem() != 1){
+            if (pager.getCurrentItem() != 1) {
                 pager.setCurrentItem(1);
-            }else{
-                if(CurrentUser.INSTANCE.isAuthenticated()){
+            } else {
+                if (CurrentUser.INSTANCE.isAuthenticated()) {
                     NavHostFragment.findNavController(this).navigate(R.id.action_mainFragment_to_createPostFragment);
-                }else{
-                   pager.setCurrentItem(2);
+                } else {
+                    pager.setCurrentItem(2);
                 }
 
             }
