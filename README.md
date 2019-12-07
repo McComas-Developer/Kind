@@ -1,6 +1,6 @@
 # Kind
 
-## Welcome Team Memebers!
+## Welcome Team Members!
 
 ### This will be our repository for CSCI 3033. The goal here is to build an Android app that lets people post positive things they had done or seen and see what others have done or seen. The goal is to spread the kindness :)
 
